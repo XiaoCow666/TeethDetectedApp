@@ -49,7 +49,9 @@ def clean_data(data_dir):
     print(f"✅ Cleanup complete. Removed {removed_count} bad/duplicate files.")
 
 def collect_images(keyword, max_num, out_dir, clean=False):
-    save_dir = os.path.join(out_dir, keyword.replace(" ", "_"))
+    #save_dir = os.path.join(out_dir, keyword.replace(" ", "_")) 原代码
+    #2.19Jiang修改
+    save_dir = os.path.join(out_dir, "caries_dataset")
     if not os.path.exists(save_dir):
         os.makedirs(save_dir)
     
