@@ -1,0 +1,7 @@
+# Task: AI Oral Health Screening MVP - Feasibility & Refinement
+
+- [ ] Verify availability of public oral health datasets (UIUC, Osti, etc.) <!-- id: 0 -->
+- [ ] Create `feasibility_report.md` with analysis of the user's proposal <!-- id: 1 -->
+- [ ] Create `implementation_plan.md` with refined architecture and steps <!-- id: 2 -->
+- [ ] Define "Rule Engine" logic structure (risk calculation) <!-- id: 3 -->
+- [ ] Outline specific GitHub collaboration workflows <!-- id: 4 -->

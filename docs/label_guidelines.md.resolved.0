@@ -1,0 +1,45 @@
+# Oral AI Data Annotation Guidelines
+
+> **Consistency is Key**. A model trained on inconsistent data will fail. Follow these rules strictly.
+
+## 1. Tooling
+*   **Software**: LabelStudio (Recommended) or LabelImg.
+*   **Format**: YOLO (txt) for detection/segmentation.
+
+## 2. Classes & IDs
+Map strict IDs to class names. Do NOT change this order.
+
+| ID | Class Name | Description | Color Code |
+| :--- | :--- | :--- | :--- |
+| `0` | `tooth` | The entire visible crown of any tooth. | Blue |
+| `1` | `caries_shallow` | Discolored spots (white/brown) on surface. No hole. | Yellow |
+| `2` | `caries_medium` | Visible hole/cavity, dark shadow. | Orange |
+| `3` | `caries_deep` | Large destruction, contacting pulp/gum proximity. | Red |
+| `4` | `calculus_mild` | Yellowish deposit along the gumline. | Green |
+| `5` | `calculus_heavy` | Thick, crusty deposit bridging teeth. | Dark Green |
+| `6` | `gingivitis_red` | Red, inflamed gum margin. | Pink |
+| `7` | `gingivitis_swollen`| Shiny, bulbous gum tissue. | Purple |
+
+## 3. Annotation Rules
+
+### General
+*   **Tight Fit**: Bounding boxes/Polygons must touch the edges of the object. No "padding".
+*   **Occlusion**: If an object is >50% blocked by lip/tongue/instrument, **DO NOT** label it.
+*   **Ambiguity**: If you are less than 70% sure, **DO NOT** label it. Better to miss a detection than to hallucinate one.
+
+### Specifics
+*   **Teeth (`tooth`)**:
+    *   Label only the permanent/primary teeth.
+    *   Do NOT label dentures or implants unless specified.
+    *   For segmentation: Trace the *visible* outline, ignoring gum overlap.
+*   **Caries (`caries_*`)**:
+    *   Circle the *entire* discolored area, not just the darkest center.
+*   **Gingivitis (`gingivitis_*`)**:
+    *   Label the specific *area* of redness, usually a crescent shape along the tooth neck.
+
+## 4. Quality Assurance (Checklist)
+Before exporting:
+1.  [ ] Are all visible teeth labeled? (Recall check)
+2.  [ ] Are boxes tight? (Precision check)
+3.  [ ] Are there any "ghost" boxes (empty space labeled)?
+4.  [ ] Did you use the correct Class ID?

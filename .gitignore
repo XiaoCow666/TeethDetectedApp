@@ -1,0 +1,28 @@
+# Python / Environment
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+env/
+venv/
+.idea/
+.vscode/
+
+# Project Data (Very Important: Do not commit large datasets)
+raw_data/
+train_data/
+datasets/
+data/raw/
+data/processed/
+
+# Models & Weights (Do not commit large PT/ONNX files > 100MB)
+*.pt
+*.onnx
+runs/
+models/weights/
+
+# Logs & System
+logs/
+*.log
+.DS_Store
+Thumbs.db

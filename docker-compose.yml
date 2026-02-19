@@ -1,0 +1,24 @@
+version: '3.8'
+
+services:
+  oral-api:
+    build: .
+    container_name: oral-ai-backend
+    image: oral-ai:v1
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./models:/app/models    # 挂载模型目录，方便热更新模型
+      - ./logs:/app/logs        # 挂载日志
+    restart: always
+    environment:
+      - WORKERS=2               # Uvicorn workers
+    deploy:
+      resources:
+        limits:
+          cpus: '2.0'           # 限制 CPU 使用
+          memory: 2G            # 限制内存 (YOLOv8 seg 需要一定内存)
+
+# 使用说明:
+# 1. 将 best.pt 放入 models/ 目录
+# 2. 运行 docker-compose up -d --build

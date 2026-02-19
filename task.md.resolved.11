@@ -1,0 +1,33 @@
+# 任务清单：AI 口腔健康筛查 MVP - 落地执行
+
+- [x] 验证公开数据集可用性 (UIUC, Osti, etc.) <!-- id: 0 -->
+- [x] 创建 [feasibility_report.md](file:///C:/Users/XiaoCow/.gemini/antigravity/brain/268420db-c35e-4da5-bd9b-5925e344a6a6/feasibility_report.md) (可行性报告) <!-- id: 1 -->
+- [x] 创建 [implementation_plan.md](file:///C:/Users/XiaoCow/.gemini/antigravity/brain/268420db-c35e-4da5-bd9b-5925e344a6a6/implementation_plan.md) (实施方案) <!-- id: 2 -->
+- [x] 定义规则引擎逻辑 ([rule_engine_logic.md](file:///C:/Users/XiaoCow/.gemini/antigravity/brain/268420db-c35e-4da5-bd9b-5925e344a6a6/rule_engine_logic.md)) <!-- id: 3 -->
+- [x] 制定 GitHub 协作规范 ([collaboration_guide.md](file:///C:/Users/XiaoCow/.gemini/antigravity/brain/268420db-c35e-4da5-bd9b-5925e344a6a6/collaboration_guide.md)) <!-- id: 4 -->
+
+# 第一阶段：数据管道与环境 (已完成)
+
+- [x] 初始化项目目录结构 ([data](file:///C:/Users/XiaoCow/.gemini/antigravity/brain/268420db-c35e-4da5-bd9b-5925e344a6a6/data/collect_data.py#20-50), `models`, `api`, `frontend`) <!-- id: 5 -->
+- [x] 实现数据采集工具 [data/collect_data.py](file:///C:/Users/XiaoCow/.gemini/antigravity/brain/268420db-c35e-4da5-bd9b-5925e344a6a6/data/collect_data.py) <!-- id: 6 -->
+- [x] 实现数据增强脚本 [data/augment.py](file:///C:/Users/XiaoCow/.gemini/antigravity/brain/268420db-c35e-4da5-bd9b-5925e344a6a6/data/augment.py) <!-- id: 7 -->
+- [x] 创建标注规范 [docs/label_guidelines.md](file:///C:/Users/XiaoCow/.gemini/antigravity/brain/268420db-c35e-4da5-bd9b-5925e344a6a6/docs/label_guidelines.md) (已转中文) <!-- id: 8 -->
+- [x] 配置环境依赖 [requirements.txt](file:///C:/Users/XiaoCow/.gemini/antigravity/brain/268420db-c35e-4da5-bd9b-5925e344a6a6/requirements.txt) <!-- id: 9 -->
+
+# 第二阶段：模型训练与后端服务 (已完成)
+
+- [x] 创建 YOLOv8-seg 训练脚本 [models/train.py](file:///C:/Users/XiaoCow/.gemini/antigravity/brain/268420db-c35e-4da5-bd9b-5925e344a6a6/models/train.py) <!-- id: 10 -->
+- [x] 创建模型导出工具 [models/export.py](file:///C:/Users/XiaoCow/.gemini/antigravity/brain/268420db-c35e-4da5-bd9b-5925e344a6a6/models/export.py) (PT -> ONNX) <!-- id: 11 -->
+- [x] 搭建后端基础框架 [api/main.py](file:///C:/Users/XiaoCow/.gemini/antigravity/brain/268420db-c35e-4da5-bd9b-5925e344a6a6/api/main.py) <!-- id: 12 -->
+- [x] 实现规则引擎核心代码 [api/core/engine.py](file:///C:/Users/XiaoCow/.gemini/antigravity/brain/268420db-c35e-4da5-bd9b-5925e344a6a6/api/core/engine.py) <!-- id: 13 -->
+- [x] 实现图像预处理工具 [api/utils/image.py](file:///C:/Users/XiaoCow/.gemini/antigravity/brain/268420db-c35e-4da5-bd9b-5925e344a6a6/api/utils/image.py) <!-- id: 14 -->
+
+# 第三阶段：前端与部署 (已完成)
+
+- [x] 设计前端页面逻辑规范 [frontend/design_spec.md](file:///C:/Users/XiaoCow/.gemini/antigravity/brain/268420db-c35e-4da5-bd9b-5925e344a6a6/frontend/design_spec.md) <!-- id: 15 -->
+- [x] 编写部署脚本 ([Dockerfile](file:///C:/Users/XiaoCow/.gemini/antigravity/brain/268420db-c35e-4da5-bd9b-5925e344a6a6/Dockerfile), [docker-compose.yml](file:///C:/Users/XiaoCow/.gemini/antigravity/brain/268420db-c35e-4da5-bd9b-5925e344a6a6/docker-compose.yml)) <!-- id: 16 -->
+- [x] 编写项目总说明 ([README.md](file:///C:/Users/XiaoCow/.gemini/antigravity/brain/268420db-c35e-4da5-bd9b-5925e344a6a6/README.md)) <!-- id: 17 -->
+
+# 第四阶段：版本控制 (进行中)
+
+- [ ] 初始化 Git 仓库并提交首个版本 <!-- id: 18 -->
