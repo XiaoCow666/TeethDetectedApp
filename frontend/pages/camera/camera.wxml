@@ -1,0 +1,7 @@
+<view class="camera-page">
+  <view class="guide-frame">
+    <view class="frame-border"></view>
+    <text class="guide-tip">请将牙齿对齐框内</text>
+  </view>
+  <button class="capture-btn" bindtap="uploadAndAnalyze">拍摄 / 上传照片</button>
+</view>

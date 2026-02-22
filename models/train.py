@@ -25,7 +25,8 @@ def train_model(data_yaml, epochs=100, img_size=640, device='cpu'):
         imgsz=img_size,
         device=device,
         patience=20,        # Early stopping
-        batch=16,           # 根据显存调整
+        batch=8,           # 根据显存调整
+        workers=2,
         save=True,          # 保存 checkpoints
         project='oral_ai_project',
         name='yolov8n_seg_v1',

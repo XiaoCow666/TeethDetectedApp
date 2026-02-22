@@ -1,0 +1,15 @@
+.report-page { padding: 30rpx; }
+.score-card { border-radius: 30rpx; padding: 60rpx; text-align: center; color: #fff; margin-bottom: 40rpx; }
+.healthy { background: #00BFA5; }
+.warning { background: #FF9800; }
+.danger { background: #F44336; }
+.score-main .num { font-size: 100rpx; font-weight: bold; }
+.summary { display: block; margin-top: 20rpx; font-size: 28rpx; opacity: 0.9; }
+.section-title { font-size: 32rpx; font-weight: bold; margin: 40rpx 0 20rpx; color: #333; }
+.image-area image { width: 100%; border-radius: 20rpx; background: #fff; }
+.issue-card { background: #fff; padding: 30rpx; border-radius: 20rpx; margin-bottom: 20rpx; border-left: 10rpx solid #F44336; }
+.issue-header { display: flex; justify-content: space-between; margin-bottom: 16rpx; }
+.issue-name { font-weight: bold; color: #333; }
+.issue-count { font-size: 24rpx; color: #999; }
+.issue-advice { font-size: 26rpx; color: #666; display: block; }
+.footer-tip { text-align: center; font-size: 22rpx; color: #ccc; margin-top: 60rpx; }

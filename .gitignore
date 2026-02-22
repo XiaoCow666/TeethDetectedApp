@@ -14,6 +14,9 @@ train_data/
 datasets/
 data/raw/
 data/processed/
+valid/
+test/
+train/
 
 # Models & Weights (Do not commit large PT/ONNX files > 100MB)
 *.pt

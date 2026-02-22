@@ -1,0 +1,50 @@
+.camera-container {
+  height: 100vh;
+  background-color: #1a1a1a;
+  display: flex;
+  flex-direction: column;
+}
+
+.guide-overlay {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.mouth-frame {
+  width: 500rpx;
+  height: 350rpx;
+  border: 4rpx dashed #00BFA5;
+  border-radius: 40rpx;
+  background: rgba(0, 191, 165, 0.05);
+}
+
+.guide-text {
+  color: #ffffff;
+  margin-top: 40rpx;
+  font-size: 28rpx;
+  opacity: 0.8;
+}
+
+.footer {
+  padding: 60rpx 40rpx;
+  background: #ffffff;
+  border-top-left-radius: 40rpx;
+  border-top-right-radius: 40rpx;
+  text-align: center;
+}
+
+.upload-btn {
+  background-color: #00BFA5;
+  color: white;
+  border-radius: 50rpx;
+  font-weight: bold;
+  margin-bottom: 20rpx;
+}
+
+.hint {
+  font-size: 24rpx;
+  color: #999;
+}

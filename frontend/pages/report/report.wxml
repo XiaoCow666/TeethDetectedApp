@@ -1,0 +1,25 @@
+<view class="report-page" wx:if="{{report}}">
+  <view class="score-card {{report.health_score < 70 ? 'danger' : (report.health_score < 90 ? 'warning' : 'healthy')}}">
+    <view class="score-main">
+      <text class="num">{{report.health_score}}</text>
+      <text class="unit">分</text>
+    </view>
+    <text class="summary">{{report.summary}}</text>
+  </view>
+
+  <view class="section-title">检测图片</view>
+  <view class="image-area">
+    <image src="{{imagePath}}" mode="aspectFit"></image>
+  </view>
+
+  <view class="section-title">详细分析 (仅列出疑似异常)</view>
+  <view class="issue-card" wx:for="{{report.issues}}" wx:key="type">
+    <view class="issue-header">
+      <text class="issue-name">{{item.title}}</text>
+      <text class="issue-count">发现 {{item.count}} 处</text>
+    </view>
+    <text class="issue-advice">{{item.action}}</text>
+  </view>
+
+  <view class="footer-tip">本报告由 AI 自动生成，仅供参考</view>
+</view>

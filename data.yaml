@@ -1,0 +1,13 @@
+train: ../train/images
+val: ../valid/images
+test: ../test/images
+
+nc: 2
+names: ['Caries', 'Tooth']
+
+roboflow:
+  workspace: dental-caries-ywg6c
+  project: dental-caries-k6zz1
+  version: 6
+  license: CC BY 4.0
+  url: https://universe.roboflow.com/dental-caries-ywg6c/dental-caries-k6zz1/dataset/6

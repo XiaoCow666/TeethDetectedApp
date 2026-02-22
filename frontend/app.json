@@ -1,0 +1,14 @@
+{
+  "pages": [
+    "pages/index/index",
+    "pages/camera/camera",
+    "pages/report/report"
+  ],
+  "window": {
+    "navigationBarTextStyle": "white",
+    "navigationBarTitleText": "AI 口腔健康管家",
+    "navigationBarBackgroundColor": "#00BFA5",
+    "backgroundColor": "#F5F7F7"
+  },
+  "style": "v2"
+}
