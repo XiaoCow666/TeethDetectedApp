@@ -1,0 +1,9 @@
+.home-container { height: 100vh; display: flex; flex-direction: column; padding: 60rpx; background: #F5F7F7; box-sizing: border-box; }
+.hero { margin-top: 100rpx; text-align: center; }
+.hero-title { font-size: 52rpx; font-weight: bold; color: #333; display: block; }
+.hero-subtitle { font-size: 28rpx; color: #666; margin-top: 16rpx; display: block; }
+.feature-list { margin-top: 100rpx; background: #fff; padding: 40rpx; border-radius: 24rpx; box-shadow: 0 10rpx 40rpx rgba(0,0,0,0.05); }
+.feature-item { font-size: 30rpx; color: #444; margin-bottom: 24rpx; }
+.action-btn-group { margin-top: auto; padding-bottom: 40rpx; text-align: center; }
+.primary-btn { background: #00BFA5; color: #fff; border-radius: 50rpx; height: 100rpx; font-weight: bold; box-shadow: 0 10rpx 30rpx rgba(0,191,165,0.3); }
+.disclaimer { font-size: 22rpx; color: #999; margin-top: 30rpx; display: block; }

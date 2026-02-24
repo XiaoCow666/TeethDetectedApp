@@ -23,7 +23,9 @@ def get_augmentation_pipeline():
         # 3. Quality Degradation (Blur, ISO noise, Compression)
         A.GaussianBlur(blur_limit=(3, 7), p=0.3),
         A.ISONoise(p=0.3),
-        A.ImageCompression(quality_lower=60, quality_upper=100, p=0.3),
+        #A.ImageCompression(quality_lower=60, quality_upper=100, p=0.3),原代码
+        #2.19Jiang修改
+        A.ImageCompression(quality_range=(60, 100), p=0.3),
         
         # 4. Crop (User zooms in/out)
         A.RandomCrop(width=450, height=450, p=0.1), # Assuming resize later

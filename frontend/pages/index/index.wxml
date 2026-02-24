@@ -1,0 +1,17 @@
+<view class="home-container">
+  <view class="hero">
+    <text class="hero-title">AI 口腔健康管家</text>
+    <text class="hero-subtitle">专业、精准、便捷的智能筛查</text>
+  </view>
+
+  <view class="feature-list">
+    <view class="feature-item">✓ 识别潜在龋齿风险</view>
+    <view class="feature-item">✓ 数字化牙位健康评估</view>
+    <view class="feature-item">✓ 毫秒级 AI 深度分析</view>
+  </view>
+
+  <view class="action-btn-group">
+    <button class="primary-btn" bindtap="startScreening">立即开始筛查</button>
+    <text class="disclaimer">本工具仅供筛查参考，不能替代临床诊断</text>
+  </view>
+</view>

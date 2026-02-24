@@ -24,10 +24,12 @@ app.add_middleware(
 )
 
 # 全局加载模型 (Lazy loading or Pre-loading)
-MODEL_PATH = "weights/best.pt" # 训练好后放在这里
+#MODEL_PATH = "weights/best.pt" # 训练好后放在这里
+MODEL_PATH = "runs/segment/oral_ai_project/yolov8n_seg_v1/weights/best.pt"
 model = None
 
 # ID 到 Label 的映射 (必须与 oral.yaml 一致)
+'''
 CLASS_NAMES = {
     0: "tooth",
     1: "caries_shallow",
@@ -37,6 +39,12 @@ CLASS_NAMES = {
     5: "calculus_heavy",
     6: "gingivitis_red",
     7: "gingivitis_swollen"
+}
+'''
+# 必须与你训练时 data.yaml 里的 names 一致
+CLASS_NAMES = {
+    0: "Caries", # 龋齿
+    1: "Tooth"   # 牙齿
 }
 
 @app.on_event("startup")
