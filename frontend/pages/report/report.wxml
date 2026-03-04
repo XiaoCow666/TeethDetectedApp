@@ -1,25 +1,55 @@
 <view class="report-page" wx:if="{{report}}">
-  <view class="score-card {{report.health_score < 70 ? 'danger' : (report.health_score < 90 ? 'warning' : 'healthy')}}">
-    <view class="score-main">
+
+  <view class="score-header {{report.health_score < 70 ? 'danger-bg' : (report.health_score < 90 ? 'warning-bg' : 'healthy-bg')}}">
+    <view class="score-circle">
       <text class="num">{{report.health_score}}</text>
       <text class="unit">分</text>
     </view>
     <text class="summary">{{report.summary}}</text>
+    <view class="meta-info">耗时: {{report.meta.inference_ms}}ms | 引擎: V3.0-9Class</view>
   </view>
 
-  <view class="section-title">检测图片</view>
-  <view class="image-area">
-    <image src="{{imagePath}}" mode="aspectFit"></image>
-  </view>
+  <view class="card image-card">
+    <view class="card-title"><view class="decor"></view>AI 视觉靶向分析</view>
+    <view class="image-wrapper">
+      <image src="{{imagePath}}" mode="widthFix" class="origin-img"></image>
 
-  <view class="section-title">详细分析 (仅列出疑似异常)</view>
-  <view class="issue-card" wx:for="{{report.issues}}" wx:key="type">
-    <view class="issue-header">
-      <text class="issue-name">{{item.title}}</text>
-      <text class="issue-count">发现 {{item.count}} 处</text>
+      <view wx:for="{{report.bboxes}}" wx:key="index"
+            class="bbox"
+            style="left: {{item.box[0]*100}}%; top: {{item.box[1]*100}}%; width: {{(item.box[2]-item.box[0])*100}}%; height: {{(item.box[3]-item.box[1])*100}}%;">
+        <view class="bbox-label">{{item.label}}</view>
+      </view>
     </view>
-    <text class="issue-advice">{{item.action}}</text>
+    <text class="image-tip">图中标记处为 AI 检测到的疑似患处，点击图片可放大查看。</text>
   </view>
 
-  <view class="footer-tip">本报告由 AI 自动生成，仅供参考</view>
+  <view class="card issue-card">
+    <view class="card-title"><view class="decor"></view>详细问题分析 ({{report.issues.length}}处)</view>
+
+    <block wx:if="{{report.issues.length > 0}}">
+      <view class="issue-item" wx:for="{{report.issues}}" wx:key="type">
+        <view class="issue-header">
+          <text class="issue-name {{item.severity}}">{{item.title}}</text>
+          <text class="issue-count">发现 {{item.count}} 处</text>
+        </view>
+        <view class="issue-action">
+          <text class="action-label">医生建议：</text>
+          <text>{{item.action}}</text>
+        </view>
+      </view>
+    </block>
+    <block wx:else>
+      <view class="empty-state">🎉 您的口腔非常健康，没有任何问题！</view>
+    </block>
+  </view>
+     <view class="commercial-action-group">
+    <button class="btn-o2o" bindtap="showWIP">
+      <text class="btn-icon">🏥</text> 一键预约附近特惠牙医
+    </button>
+    <button class="btn-pdf" bindtap="showWIP">
+      <text class="btn-icon">📥</text> 下载完整临床级 PDF 报告
+    </button>
+  </view>
+
+  <view class="footer-tip">本报告由深度学习网络生成，仅供筛查参考，不能替代临床诊断。</view>
 </view>

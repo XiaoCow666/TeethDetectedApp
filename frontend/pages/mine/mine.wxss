@@ -1,0 +1,15 @@
+.mine-container { min-height: 100vh; background: #F5F7F7; padding-bottom: 40rpx; }
+.header-card { background: #00BFA5; padding: 100rpx 40rpx 60rpx; display: flex; align-items: center; border-bottom-left-radius: 40rpx; border-bottom-right-radius: 40rpx; box-shadow: 0 10rpx 30rpx rgba(0,191,165,0.2); }
+.avatar-wrapper { padding: 0; width: 140rpx !important; height: 140rpx !important; border-radius: 50%; border: 6rpx solid rgba(255,255,255,0.4); margin: 0; margin-right: 30rpx; background: none; }
+.avatar-wrapper::after { border: none; }
+.avatar { width: 100%; height: 100%; border-radius: 50%; display: block; }
+.user-info { flex: 1; display: flex; flex-direction: column; }
+.nickname-input { color: #fff; font-size: 40rpx; font-weight: bold; margin-bottom: 10rpx; }
+.user-desc { color: rgba(255,255,255,0.8); font-size: 24rpx; }
+
+.menu-list { background: #fff; border-radius: 24rpx; margin: 40rpx 30rpx; padding: 10rpx 30rpx; box-shadow: 0 8rpx 24rpx rgba(0,0,0,0.03); }
+.menu-item { display: flex; align-items: center; padding: 36rpx 0; border-bottom: 1px solid #F0F0F0; }
+.menu-item:last-child { border-bottom: none; }
+.menu-icon { font-size: 36rpx; margin-right: 20rpx; }
+.menu-text { flex: 1; font-size: 30rpx; color: #333; }
+.arrow { color: #ccc; font-family: consolas; }

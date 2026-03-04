@@ -1,17 +1,54 @@
 <view class="home-container">
-  <view class="hero">
-    <text class="hero-title">AI 口腔健康管家</text>
-    <text class="hero-subtitle">专业、精准、便捷的智能筛查</text>
+  <swiper class="banner-swiper" indicator-dots="true" autoplay="true" circular="true" indicator-active-color="#00BFA5">
+    <swiper-item class="banner-item">
+      <view class="banner-card bg-green">
+        <text class="banner-title">AI 口腔筛查 3.0 发布</text>
+        <text class="banner-sub">9大类病变，毫秒级精准定位</text>
+      </view>
+    </swiper-item>
+    <swiper-item class="banner-item" bindtap="showWIP">
+      <view class="banner-card bg-blue">
+        <text class="banner-title">新人专享 O2O 福利</text>
+        <text class="banner-sub">附近三甲牙医免费线上问诊</text>
+      </view>
+    </swiper-item>
+  </swiper>
+
+  <view class="nav-grid">
+    <view class="grid-item" bindtap="startScreening">
+      <view class="icon-box active-box"><text class="icon-txt">📷</text></view>
+      <text class="grid-name">AI 拍照筛查</text>
+    </view>
+
+    <view class="grid-item" bindtap="showWIP">
+      <view class="icon-box"><text class="icon-txt">🔦</text></view>
+      <text class="grid-name">实时内窥镜</text>
+      <text class="badge">硬件</text>
+    </view>
+
+    <view class="grid-item" bindtap="showWIP">
+      <view class="icon-box"><text class="icon-txt">🏥</text></view>
+      <text class="grid-name">附近诊所</text>
+    </view>
+
+    <view class="grid-item" bindtap="showWIP">
+      <view class="icon-box"><text class="icon-txt">🦷</text></view>
+      <text class="grid-name">3D 牙齿档案</text>
+      <text class="badge">Pro</text>
+    </view>
   </view>
 
-  <view class="feature-list">
-    <view class="feature-item">✓ 识别潜在龋齿风险</view>
-    <view class="feature-item">✓ 数字化牙位健康评估</view>
-    <view class="feature-item">✓ 毫秒级 AI 深度分析</view>
-  </view>
-
-  <view class="action-btn-group">
-    <button class="primary-btn" bindtap="startScreening">立即开始筛查</button>
-    <text class="disclaimer">本工具仅供筛查参考，不能替代临床诊断</text>
+  <view class="health-trend-card" bindtap="showWIP">
+    <view class="trend-header">
+      <text class="trend-title">我的口腔健康趋势</text>
+      <text class="arrow">查看详情 ></text>
+    </view>
+    <view class="trend-content">
+      <view class="trend-data">
+        <text class="score-up">上次筛查得分: 85</text>
+        <text class="hint">击败了全国 72% 的用户</text>
+      </view>
+      <view class="placeholder-chart">📊 动态图表生成中...</view>
+    </view>
   </view>
 </view>

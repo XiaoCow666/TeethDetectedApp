@@ -1,9 +1,28 @@
-.home-container { height: 100vh; display: flex; flex-direction: column; padding: 60rpx; background: #F5F7F7; box-sizing: border-box; }
-.hero { margin-top: 100rpx; text-align: center; }
-.hero-title { font-size: 52rpx; font-weight: bold; color: #333; display: block; }
-.hero-subtitle { font-size: 28rpx; color: #666; margin-top: 16rpx; display: block; }
-.feature-list { margin-top: 100rpx; background: #fff; padding: 40rpx; border-radius: 24rpx; box-shadow: 0 10rpx 40rpx rgba(0,0,0,0.05); }
-.feature-item { font-size: 30rpx; color: #444; margin-bottom: 24rpx; }
-.action-btn-group { margin-top: auto; padding-bottom: 40rpx; text-align: center; }
-.primary-btn { background: #00BFA5; color: #fff; border-radius: 50rpx; height: 100rpx; font-weight: bold; box-shadow: 0 10rpx 30rpx rgba(0,191,165,0.3); }
-.disclaimer { font-size: 22rpx; color: #999; margin-top: 30rpx; display: block; }
+.home-container { min-height: 100vh; background: #F5F7F7; padding-bottom: 40rpx; }
+/* 轮播图样式 */
+.banner-swiper { height: 320rpx; margin-bottom: 20rpx; }
+.banner-item { padding: 20rpx 30rpx; box-sizing: border-box; }
+.banner-card { width: 100%; height: 100%; border-radius: 24rpx; padding: 40rpx; box-sizing: border-box; display: flex; flex-direction: column; justify-content: center; box-shadow: 0 10rpx 20rpx rgba(0,0,0,0.05); }
+.bg-green { background: linear-gradient(135deg, #00BFA5 0%, #00897B 100%); color: white; }
+.bg-blue { background: linear-gradient(135deg, #4FC3F7 0%, #0288D1 100%); color: white; }
+.banner-title { font-size: 36rpx; font-weight: bold; margin-bottom: 10rpx; }
+.banner-sub { font-size: 24rpx; opacity: 0.9; }
+
+/* 金刚区导航 */
+.nav-grid { display: flex; justify-content: space-around; padding: 30rpx; background: #fff; margin: 0 30rpx 30rpx; border-radius: 24rpx; box-shadow: 0 8rpx 24rpx rgba(0,0,0,0.03); }
+.grid-item { display: flex; flex-direction: column; align-items: center; position: relative; }
+.icon-box { width: 100rpx; height: 100rpx; background: #F0F4F4; border-radius: 30rpx; display: flex; justify-content: center; align-items: center; margin-bottom: 16rpx; }
+.active-box { background: rgba(0, 191, 165, 0.15); border: 2rpx solid #00BFA5; }
+.icon-txt { font-size: 48rpx; }
+.grid-name { font-size: 24rpx; color: #333; font-weight: 500; }
+.badge { position: absolute; top: -10rpx; right: -10rpx; background: #F44336; color: white; font-size: 16rpx; padding: 4rpx 10rpx; border-radius: 20rpx; font-weight: bold; }
+
+/* 趋势面板 */
+.health-trend-card { background: #fff; margin: 0 30rpx; border-radius: 24rpx; padding: 30rpx; box-shadow: 0 8rpx 24rpx rgba(0,0,0,0.03); }
+.trend-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20rpx; }
+.trend-title { font-size: 32rpx; font-weight: bold; color: #333; }
+.arrow { font-size: 24rpx; color: #999; }
+.trend-content { background: #FAFAFA; border-radius: 16rpx; padding: 30rpx; display: flex; justify-content: space-between; align-items: center; }
+.score-up { display: block; font-size: 28rpx; font-weight: bold; color: #00BFA5; margin-bottom: 10rpx; }
+.hint { font-size: 22rpx; color: #888; }
+.placeholder-chart { font-size: 24rpx; color: #ccc; }

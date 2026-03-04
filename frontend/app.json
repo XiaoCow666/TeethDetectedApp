@@ -2,13 +2,34 @@
   "pages": [
     "pages/index/index",
     "pages/camera/camera",
-    "pages/report/report"
+    "pages/report/report",
+    "pages/mine/mine"
   ],
   "window": {
     "navigationBarTextStyle": "white",
     "navigationBarTitleText": "AI 口腔健康管家",
     "navigationBarBackgroundColor": "#00BFA5",
     "backgroundColor": "#F5F7F7"
+  },
+  "tabBar": {
+    "color": "#999999",
+    "selectedColor": "#00BFA5",
+    "backgroundColor": "#ffffff",
+    "borderStyle": "white",
+    "list": [
+      {
+        "pagePath": "pages/index/index",
+        "text": "首页",
+        "iconPath": "assets/icons/home.png",
+        "selectedIconPath": "assets/icons/home_active.png"
+      },
+      {
+        "pagePath": "pages/mine/mine",
+        "text": "我的",
+        "iconPath": "assets/icons/mine.png",
+        "selectedIconPath": "assets/icons/mine_active.png"
+      }
+    ]
   },
   "style": "v2"
 }

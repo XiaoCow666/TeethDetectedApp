@@ -1,15 +1,43 @@
-.report-page { padding: 30rpx; }
-.score-card { border-radius: 30rpx; padding: 60rpx; text-align: center; color: #fff; margin-bottom: 40rpx; }
-.healthy { background: #00BFA5; }
-.warning { background: #FF9800; }
-.danger { background: #F44336; }
-.score-main .num { font-size: 100rpx; font-weight: bold; }
-.summary { display: block; margin-top: 20rpx; font-size: 28rpx; opacity: 0.9; }
-.section-title { font-size: 32rpx; font-weight: bold; margin: 40rpx 0 20rpx; color: #333; }
-.image-area image { width: 100%; border-radius: 20rpx; background: #fff; }
-.issue-card { background: #fff; padding: 30rpx; border-radius: 20rpx; margin-bottom: 20rpx; border-left: 10rpx solid #F44336; }
-.issue-header { display: flex; justify-content: space-between; margin-bottom: 16rpx; }
-.issue-name { font-weight: bold; color: #333; }
-.issue-count { font-size: 24rpx; color: #999; }
-.issue-advice { font-size: 26rpx; color: #666; display: block; }
-.footer-tip { text-align: center; font-size: 22rpx; color: #ccc; margin-top: 60rpx; }
+.report-page { padding-bottom: 60rpx; background: #F5F7F7; min-height: 100vh; }
+
+/* 顶部计分板 */
+.score-header { padding: 60rpx 40rpx; text-align: center; color: #fff; border-bottom-left-radius: 40rpx; border-bottom-right-radius: 40rpx; box-shadow: 0 10rpx 30rpx rgba(0,0,0,0.1); }
+.healthy-bg { background: linear-gradient(135deg, #00BFA5 0%, #009688 100%); }
+.warning-bg { background: linear-gradient(135deg, #FFB74D 0%, #FF9800 100%); }
+.danger-bg { background: linear-gradient(135deg, #EF5350 0%, #F44336 100%); }
+
+.score-circle { width: 240rpx; height: 240rpx; border-radius: 50%; border: 12rpx solid rgba(255,255,255,0.3); margin: 0 auto; display: flex; align-items: baseline; justify-content: center; background: rgba(255,255,255,0.1); padding-top: 60rpx; box-sizing: border-box; }
+.score-circle .num { font-size: 110rpx; font-weight: bold; line-height: 1; }
+.score-circle .unit { font-size: 32rpx; margin-left: 10rpx; }
+.summary { display: block; margin-top: 30rpx; font-size: 30rpx; font-weight: 500; }
+.meta-info { font-size: 22rpx; opacity: 0.7; margin-top: 20rpx; }
+
+/* 通用卡片样式 */
+.card { background: #fff; margin: 30rpx; border-radius: 24rpx; padding: 30rpx; box-shadow: 0 8rpx 24rpx rgba(0,0,0,0.04); }
+.card-title { font-size: 32rpx; font-weight: bold; color: #333; margin-bottom: 30rpx; display: flex; align-items: center; }
+.decor { width: 8rpx; height: 32rpx; background: #00BFA5; border-radius: 8rpx; margin-right: 16rpx; }
+
+/* AI 识别画框核心 CSS */
+.image-wrapper { position: relative; width: 100%; font-size: 0; border-radius: 16rpx; overflow: hidden; }
+.origin-img { width: 100%; display: block; }
+.bbox { position: absolute; border: 4rpx solid #F44336; box-sizing: border-box; background: rgba(244, 67, 54, 0.15); border-radius: 6rpx; box-shadow: 0 0 10rpx rgba(244, 67, 54, 0.4); pointer-events: none; }
+.bbox-label { position: absolute; top: -40rpx; left: -4rpx; background: #F44336; color: #fff; font-size: 20rpx; font-weight: bold; padding: 4rpx 12rpx; border-radius: 8rpx 8rpx 8rpx 0; white-space: nowrap; }
+.image-tip { font-size: 22rpx; color: #999; display: block; text-align: center; margin-top: 20rpx; }
+
+/* 问题列表 */
+.issue-item { background: #F9FAFB; padding: 24rpx; border-radius: 16rpx; margin-bottom: 20rpx; }
+.issue-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12rpx; }
+.issue-name { font-size: 30rpx; font-weight: bold; }
+.issue-name.high { color: #F44336; }
+.issue-name.medium { color: #FF9800; }
+.issue-name.low { color: #00BFA5; }
+.issue-count { font-size: 24rpx; color: #888; background: #E0E0E0; padding: 4rpx 12rpx; border-radius: 20rpx; }
+.issue-action { font-size: 26rpx; color: #555; line-height: 1.5; }
+.action-label { font-weight: bold; color: #333; }
+.empty-state { text-align: center; padding: 40rpx; color: #00BFA5; font-weight: bold; }
+.footer-tip { text-align: center; font-size: 22rpx; color: #ccc; margin: 40rpx 0; }
+/* 商业转化按钮区 */
+.commercial-action-group { margin: 40rpx 30rpx; }
+.btn-o2o { background: #00BFA5; color: white; border-radius: 50rpx; font-weight: bold; font-size: 32rpx; height: 100rpx; line-height: 100rpx; margin-bottom: 30rpx; box-shadow: 0 10rpx 30rpx rgba(0,191,165,0.3); }
+.btn-pdf { background: #ffffff; color: #00BFA5; border: 2rpx solid #00BFA5; border-radius: 50rpx; font-weight: bold; font-size: 32rpx; height: 100rpx; line-height: 100rpx; }
+.btn-icon { margin-right: 10rpx; }
