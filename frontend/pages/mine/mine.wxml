@@ -1,0 +1,39 @@
+<view class="mine-container">
+  <view class="header-card">
+    <button class="avatar-wrapper" open-type="chooseAvatar" bind:chooseavatar="onChooseAvatar">
+      <image class="avatar" src="{{userInfo.avatarUrl || 'https://mmbiz.qpic.cn/mmbiz/icTdbqWNOwNRna42FI242Lcia07jQodd2FJGIYQfG0LAJGFxM4FbnQP6yfMxBgJ0F3YRqJCJ1aPAK2dQagdusBZg/0'}}"></image>
+    </button>
+    <view class="user-info">
+      <input type="nickname" class="nickname-input" placeholder="点击设置昵称" value="{{userInfo.nickName}}" bindblur="onNicknameChange"/>
+      <text class="user-desc">守护您的每一颗牙齿</text>
+    </view>
+  </view>
+
+  <view class="menu-list">
+    <view class="menu-item" bindtap="viewHistory">
+      <text class="menu-icon">📄</text>
+      <text class="menu-text">我的筛查记录</text>
+      <text class="arrow">></text>
+    </view>
+    <view class="menu-item" bindtap="contactUs">
+      <text class="menu-icon">💬</text>
+      <text class="menu-text">联系在线客服</text>
+      <text class="arrow">></text>
+    </view>
+        <view class="menu-item" bindtap="showWIP">
+      <text class="menu-icon">📷</text>
+      <text class="menu-text">绑定智能内窥镜 (Beta)</text>
+      <text class="arrow">未绑定 ></text>
+    </view>
+    <view class="menu-item" bindtap="showWIP">
+      <text class="menu-icon">👨‍👩‍👧</text>
+      <text class="menu-text">家庭口腔档案</text>
+      <text class="arrow">></text>
+    </view>
+    <view class="menu-item">
+      <text class="menu-icon">⚙️</text>
+      <text class="menu-text">隐私设置</text>
+      <text class="arrow">></text>
+    </view>
+  </view>
+</view>

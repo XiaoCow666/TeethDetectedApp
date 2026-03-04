@@ -1,20 +1,12 @@
-from fastapi import FastAPI, File, UploadFile, HTTPException
-from fastapi.middleware.cors import CORSMiddleware
-from ultralytics import YOLO
-import uvicorn
-import os
+import io
 import time
+from fastapi import FastAPI, UploadFile, File
+from fastapi.middleware.cors import CORSMiddleware
+from PIL import Image
+from ultralytics import YOLO
 
-from api.utils.image import read_image_file, visualize_results
-from api.core.engine import RuleEngine
+app = FastAPI(title="Oral AI Diagnosis API", version="3.0-BBox")
 
-app = FastAPI(
-    title="Oral AI Screening API",
-    description="专业口腔健康筛查 AI 服务 (MVP)",
-    version="0.1.0"
-)
-
-# 允许跨域
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -23,98 +15,94 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# 全局加载模型 (Lazy loading or Pre-loading)
-#MODEL_PATH = "weights/best.pt" # 训练好后放在这里
-MODEL_PATH = "runs/segment/oral_ai_project/yolov8n_seg_v1/weights/best.pt"
-model = None
+# 加载模型
+MODEL_PATH = "best.pt"
+try:
+    model = YOLO(MODEL_PATH)
+    print(f"✅ 成功加载 9 分类模型: {MODEL_PATH}")
+except Exception as e:
+    print(f"❌ 模型加载失败: {e}")
 
-# ID 到 Label 的映射 (必须与 oral.yaml 一致)
-'''
-CLASS_NAMES = {
-    0: "tooth",
-    1: "caries_shallow",
-    2: "caries_medium",
-    3: "caries_deep",
-    4: "calculus_mild",
-    5: "calculus_heavy",
-    6: "gingivitis_red",
-    7: "gingivitis_swollen"
-}
-'''
-# 必须与你训练时 data.yaml 里的 names 一致
-CLASS_NAMES = {
-    0: "Caries", # 龋齿
-    1: "Tooth"   # 牙齿
-}
 
-@app.on_event("startup")
-async def load_model():
-    global model
-    # 如果没有模型文件，我们可以加载一个官方提供的 nano 模型先跑通流程
-    target_path = MODEL_PATH if os.path.exists(MODEL_PATH) else "yolov8n-seg.pt"
-    print(f"🔄 Loading AI Model from {target_path}...")
-    try:
-        model = YOLO(target_path)
-        print("✅ Model loaded successfully.")
-    except Exception as e:
-        print(f"❌ Failed to load model: {e}")
+class RuleEngine:
+    DIAGNOSIS_RULES = {
+        "CALCULUS": {"title": "牙结石", "severity": "medium", "penalty": 5, "action": "建议预约洗牙（超声波洁治）。"},
+        "Gingivitis": {"title": "牙龈炎", "severity": "medium", "penalty": 10,
+                       "action": "请注意口腔卫生，掌握巴氏刷牙法。"},
+        "Lichen": {"title": "疑似扁平苔藓", "severity": "high", "penalty": 15,
+                   "action": "强烈建议尽快前往口腔黏膜科排查。"},
+        "caries": {"title": "疑似龋齿", "severity": "high", "penalty": 15, "action": "建议尽快就医修补，防止龋洞加深。"},
+        "decaycavity": {"title": "严重深龋洞", "severity": "high", "penalty": 20,
+                        "action": "请立刻前往医院评估是否需要根管治疗。"},
+        "earlydecay": {"title": "早期脱矿/浅龋", "severity": "low", "penalty": 2,
+                       "action": "建议使用含氟牙膏，定期观察复查。"},
+        "healthytooth": {"title": "健康牙齿", "severity": "info", "penalty": 0, "action": "牙齿状况良好，请继续保持！"},
+        "missing": {"title": "牙齿缺失", "severity": "medium", "penalty": 10,
+                    "action": "建议咨询医生进行种植牙或义齿修复。"},
+        "plaque": {"title": "牙菌斑沉积", "severity": "low", "penalty": 2, "action": "建议增加刷牙时长，并使用冲牙器。"}
+    }
 
-@app.get("/")
-def health_check():
-    return {"status": "ok", "service": "Oral AI API"}
+    @classmethod
+    def analyze(cls, predictions):
+        score = 100
+        issues_dict = {}
+
+        for label in predictions:
+            rule = cls.DIAGNOSIS_RULES.get(label)
+            if not rule or label == "healthytooth":
+                continue
+
+            score -= rule["penalty"]
+            score = max(0, score)
+
+            if label in issues_dict:
+                issues_dict[label]["count"] += 1
+            else:
+                issues_dict[label] = {
+                    "type": label,
+                    "title": rule["title"],
+                    "severity": rule["severity"],
+                    "action": rule["action"],
+                    "count": 1
+                }
+
+        issues_list = list(issues_dict.values())
+        if score >= 90:
+            summary = "您的口腔状况良好，未见明显异常。"
+        elif score >= 70:
+            summary = "发现初期口腔问题，建议近期多加关注。"
+        else:
+            summary = "发现较多口腔病变痕迹，强烈建议尽快预约牙医！"
+
+        return {"health_score": score, "summary": summary, "issues": issues_list}
+
 
 @app.post("/predict")
-async def predict_oral_health(file: UploadFile = File(...)):
-    """
-    核心接口：上传图片 -> AI推理 -> 规则引擎 -> 返回报告
-    """
-    if not model:
-        raise HTTPException(status_code=503, detail="Model not loaded")
-    
+async def predict(file: UploadFile = File(...)):
     start_time = time.time()
-    
-    # 1. 读取图片
-    try:
-        image_bytes = await file.read()
-        image = read_image_file(image_bytes)
-    except Exception as e:
-        raise HTTPException(status_code=400, detail=f"Invalid image file: {e}")
-        
-    # 2. AI 推理
-    # conf=0.25 是默认阈值，可以根据需求调整
-    results = model.predict(image, conf=0.25)
-    result = results[0] #这一帧的结果
-    
-    # 3. 解析结果
-    detections = []
-    
-    if result.boxes:
-        for box in result.boxes:
-            cls_id = int(box.cls[0])
-            conf = float(box.conf[0])
-            bbox = box.xyxy[0].tolist() # [x1, y1, x2, y2]
-            
-            label = CLASS_NAMES.get(cls_id, "unknown")
-            
-            detections.append({
-                "label": label,
-                "conf": conf,
-                "bbox": bbox,
-                # 如果有分割掩码，也可以在这里添加 "mask": ...
-            })
-            
-    # 4. 规则引擎生成报告
-    report = RuleEngine.generate_report(detections)
-    
-    # 5. 添加性能指标
-    process_time = (time.time() - start_time) * 1000
-    report['meta'] = {
-        "inference_ms": round(process_time, 2),
-        "model_version": "v1.0-mvp"
-    }
-    
-    return report
+    image_bytes = await file.read()
+    image = Image.open(io.BytesIO(image_bytes)).convert("RGB")
 
-if __name__ == "__main__":
-    # 开发模式启动
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+    results = model(image)
+
+    predictions = []
+    bboxes = []  # 存储红框坐标
+
+    for r in results:
+        if r.boxes:
+            for box in r.boxes:
+                class_id = int(box.cls[0])
+                class_name = model.names[class_id]
+                predictions.append(class_name)
+
+                # 提取归一化坐标并过滤健康牙齿
+                if class_name != "healthytooth":
+                    xyxyn = box.xyxyn[0].tolist()
+                    cn_title = RuleEngine.DIAGNOSIS_RULES.get(class_name, {}).get("title", class_name)
+                    bboxes.append({"label": cn_title, "box": xyxyn})
+
+    report = RuleEngine.analyze(predictions)
+    report["bboxes"] = bboxes  # 将坐标打包进报告
+    report["meta"] = {"inference_ms": round((time.time() - start_time) * 1000, 2)}
+
+    return report

@@ -41,7 +41,8 @@ label-studio start
 ```xml
 <View>
   <Image name="image" value="$image"/>
-  <RectangleLabels name="label" toName="image">
+  <!-- 保留原有标签和颜色，仅修改标注形状类型 -->
+  <PolygonLabels name="label" toName="image">
     <Label value="tooth" background="blue"/>
     <Label value="caries_shallow" background="#FFD700"/>
     <Label value="caries_medium" background="#FFA500"/>
@@ -50,7 +51,18 @@ label-studio start
     <Label value="calculus_heavy" background="green"/>
     <Label value="gingivitis_red" background="pink"/>
     <Label value="gingivitis_swollen" background="purple"/>
-  </RectangleLabels>
+  </PolygonLabels>
+  <!-- 新增画笔工具，用于蛀牙/牙龈炎等像素级精细标注 -->
+  <BrushLabels name="brush_label" toName="image" strokeWidth="3">
+    <Label value="tooth" background="blue"/>
+    <Label value="caries_shallow" background="#FFD700"/>
+    <Label value="caries_medium" background="#FFA500"/>
+    <Label value="caries_deep" background="red"/>
+    <Label value="calculus_mild" background="#90EE90"/>
+    <Label value="calculus_heavy" background="green"/>
+    <Label value="gingivitis_red" background="pink"/>
+    <Label value="gingivitis_swollen" background="purple"/>
+  </BrushLabels>
 </View>
 ```
 *注意：这个配置确保了导出的类别 ID 与我们代码中的 `oral.yaml` 严格一致。*
