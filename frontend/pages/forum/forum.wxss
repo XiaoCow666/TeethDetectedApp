@@ -1,0 +1,98 @@
+.forum-page { min-height: 100vh; background: #F5F7F7; padding: 30rpx; box-sizing: border-box; }
+/* 提升层级，防止被系统任何组件遮挡 */
+.post-btn { position: relative; z-index: 10; background: #00BFA5; color: #fff; text-align: center; padding: 24rpx; border-radius: 40rpx; font-weight: bold; margin-bottom: 30rpx; box-shadow: 0 8rpx 20rpx rgba(0, 191, 165, 0.3); }
+.post-list { height: calc(100vh - 160rpx); }
+.post-card { background: #fff; border-radius: 20rpx; padding: 30rpx; margin-bottom: 30rpx; box-shadow: 0 4rpx 12rpx rgba(0,0,0,0.03); }
+.post-header { display: flex; align-items: center; margin-bottom: 20rpx; }
+.anon-avatar { width: 70rpx; height: 70rpx; border-radius: 50%; background: #D1EAE6; margin-right: 20rpx; display: flex; justify-content: center; align-items: center; font-size: 36rpx;}
+.anon-info { display: flex; flex-direction: column; flex: 1; }
+.anon-name { font-size: 28rpx; font-weight: bold; color: #333; }
+.post-time { font-size: 22rpx; color: #999; margin-top: 4rpx; }
+.delete-btn { font-size: 24rpx; color: #999; padding: 10rpx; }
+
+.post-content { font-size: 30rpx; color: #333; line-height: 1.6; margin-bottom: 24rpx; word-break: break-all; }
+
+.post-footer { 
+  display: flex; 
+  align-items: center; 
+  justify-content: space-between; 
+  border-top: 1rpx solid #f0f0f0; 
+  padding-top: 20rpx; 
+}
+.action-btn { 
+  display: flex; 
+  align-items: center;
+  font-size: 26rpx; 
+  color: #666; 
+  transition: all 0.2s; 
+}
+.emoji-icon {
+  font-size: 32rpx; 
+  margin-right: 10rpx;
+  line-height: 1;
+}
+.action-btn.liked { color: #FF4D4F; font-weight: bold; animation: pop 0.3s; }
+
+@keyframes pop { 0% { transform: scale(1); } 50% { transform: scale(1.2); } 100% { transform: scale(1); } }
+
+.comment-panel { height: 75vh; display: flex; flex-direction: column; background: #fff; }
+.panel-header { display: flex; justify-content: center; align-items: center; padding: 30rpx; border-bottom: 1rpx solid #eee; position: relative; flex-shrink: 0; }
+.p-title { font-size: 32rpx; font-weight: bold; color: #333; }
+.p-close { position: absolute; right: 40rpx; font-size: 36rpx; color: #999; padding: 10rpx; }
+
+.comment-scroll { flex: 1; height: 0; padding: 30rpx; box-sizing: border-box; }
+
+.c-item { display: flex; align-items: flex-start; margin-bottom: 40rpx; }
+.c-avatar { width: 64rpx; height: 64rpx; border-radius: 50%; background: #eee; margin-right: 20rpx; display: flex; justify-content: center; align-items: center; flex-shrink: 0; font-size: 32rpx; }
+.c-content { flex: 1; display: flex; flex-direction: column; padding-right: 20rpx; }
+.c-name { font-size: 26rpx; color: #888; margin-bottom: 8rpx; }
+
+.c-text { font-size: 28rpx; color: #333; line-height: 1.5; word-break: break-all; }
+.reply-tag { color: #00BFA5; margin-right: 8rpx; }
+
+.c-meta { display: flex; align-items: center; margin-top: 12rpx; }
+.c-time { font-size: 22rpx; color: #999; margin-right: 20rpx; }
+.c-delete { font-size: 24rpx; color: #666; font-weight: bold; padding: 4rpx 10rpx; }
+
+.c-like-box { display: flex; flex-direction: column; align-items: center; justify-content: flex-start; min-width: 60rpx; padding-top: 10rpx; flex-shrink: 0; }
+.c-like-icon { font-size: 36rpx; color: #999; margin-bottom: 4rpx; transition: all 0.2s; }
+.c-like-num { font-size: 22rpx; color: #999; }
+.c-like-icon.liked, .c-like-num.liked { color: #FF4D4F; }
+.empty-comment { text-align: center; color: #999; font-size: 28rpx; padding: 60rpx 0; }
+
+.panel-footer { 
+  width: 100%; 
+  box-sizing: border-box;
+  padding: 20rpx 30rpx calc(env(safe-area-inset-bottom) + 20rpx); 
+  border-top: 1rpx solid #f0f0f0; 
+  display: flex; 
+  align-items: center; 
+  background: #fff; 
+  flex-shrink: 0;
+  transition: margin-bottom 0.25s ease-out; 
+}
+
+.comment-input { flex: 1; background: #F5F7F7; height: 72rpx; border-radius: 36rpx; padding: 0 30rpx; font-size: 28rpx; color: #333; }
+.send-btn { margin-left: 20rpx; padding: 0; width: 120rpx !important; height: 72rpx; line-height: 72rpx; font-size: 28rpx; color: #fff; background: #00BFA5; border-radius: 36rpx; font-weight: bold; }
+.send-btn::after { border: none; }
+
+/* ============================================== */
+/* 🌟 核心修复：纯原生安全弹窗，100% 避免微信组件消失 Bug */
+/* ============================================== */
+.post-mask { 
+  position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
+  background: rgba(0, 0, 0, 0.5); z-index: 9998; 
+}
+.create-panel { 
+  position: fixed; bottom: 0; left: 0; width: 100%; height: 60vh; 
+  display: flex; flex-direction: column; background: #fff; 
+  padding: 30rpx; box-sizing: border-box; border-radius: 40rpx 40rpx 0 0; z-index: 9999;
+  transform: translateY(100%); transition: transform 0.3s ease-in-out;
+}
+.create-panel.show { transform: translateY(0); }
+
+.cp-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30rpx; flex-shrink: 0; }
+.cp-cancel { font-size: 30rpx; color: #999; padding: 10rpx; }
+.cp-title { font-size: 32rpx; font-weight: bold; color: #333; }
+.cp-publish { font-size: 30rpx; color: #00BFA5; font-weight: bold; padding: 10rpx; }
+.cp-textarea { flex: 1; width: 100%; font-size: 30rpx; line-height: 1.6; color: #333; }

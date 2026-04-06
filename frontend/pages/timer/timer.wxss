@@ -1,0 +1,151 @@
+.premium-timer-page {
+  min-height: 100vh; background: #0A1016;
+  background-image: radial-gradient(circle at center, #111D27 0%, #060A0E 100%);
+  display: flex; flex-direction: column; align-items: center; padding-top: 6vh; box-sizing: border-box;
+}
+
+/* 🌟 右上角数据统计入口 */
+.stats-entry-btn { position: absolute; top: 6vh; right: 30rpx; width: 80rpx; height: 80rpx; background: rgba(0, 230, 184, 0.1); border: 2rpx solid rgba(0, 230, 184, 0.3); border-radius: 50%; display: flex; justify-content: center; align-items: center; z-index: 100; backdrop-filter: blur(10px); }
+.stats-entry-btn .icon { font-size: 36rpx; opacity: 0.9; }
+
+/* 🌟 顶部进度条 (6 阶紧凑版) */
+.stage-container { display: flex; gap: 10rpx; margin-bottom: 4vh; }
+.stage-bar { width: 44rpx; height: 8rpx; background: rgba(0, 230, 184, 0.15); border-radius: 6rpx; transition: all 0.4s ease; }
+.stage-bar.active { background: #00E6B8; box-shadow: 0 0 16rpx rgba(0, 230, 184, 0.6); }
+
+/* 提示文案 */
+.instruction-box { height: 90rpx; display: flex; justify-content: center; align-items: center; margin-bottom: 2vh; padding: 0 40rpx; text-align: center; }
+.instruction-text { color: #FFFFFF; font-size: 30rpx; letter-spacing: 2rpx; font-weight: 500; text-shadow: 0 4rpx 10rpx rgba(0,0,0,0.5); transition: opacity 0.3s; line-height: 1.4; }
+
+/* 呼吸涟漪光环 */
+.hud-wrapper { position: relative; width: 480rpx; height: 480rpx; display: flex; justify-content: center; align-items: center; margin-bottom: 6vh; border-radius: 50%; }
+.clean-ring { position: absolute; border-radius: 50%; border: 2rpx solid rgba(0, 230, 184, 0.1); background: radial-gradient(circle, rgba(0, 230, 184, 0.02), transparent 70%); transition: all 0.5s; }
+.outer-ring { width: 420rpx; height: 420rpx; }
+.inner-ring { width: 320rpx; height: 320rpx; border: 4rpx solid rgba(0, 230, 184, 0.05); }
+.hud-wrapper.running .outer-ring { animation: breatheOuter 4s ease-in-out infinite alternate; border-color: rgba(0, 230, 184, 0.2); }
+.hud-wrapper.running .inner-ring { animation: breatheInner 3s ease-in-out infinite alternate; border-color: rgba(0, 230, 184, 0.4); box-shadow: 0 0 40rpx rgba(0, 230, 184, 0.1); }
+@keyframes breatheOuter { 0% { transform: scale(0.95); opacity: 0.6; } 100% { transform: scale(1.05); opacity: 1; } }
+@keyframes breatheInner { 0% { transform: scale(0.98); } 100% { transform: scale(1.02); } }
+
+/* 烤瓷牙排 */
+.hologram-display { position: relative; width: 240rpx; height: 240rpx; display: flex; justify-content: center; align-items: center; z-index: 10; }
+.tech-mouth { position: absolute; width: 220rpx; height: 160rpx; background: radial-gradient(ellipse at center, rgba(255, 255, 255, 0.03) 0%, transparent 70%); display: flex; flex-direction: column; justify-content: space-between; align-items: center; padding: 10rpx 0; box-sizing: border-box; z-index: 10; }
+.tech-jaw { display: flex; justify-content: center; align-items: flex-end; gap: 4rpx; }
+.top-jaw { align-items: flex-start; }
+.tech-tooth { background: #FFFFFF; border-radius: 8rpx; box-shadow: inset 0 -4rpx 6rpx rgba(0, 191, 165, 0.15), inset 0 4rpx 4rpx rgba(255, 255, 255, 1), 0 4rpx 8rpx rgba(0, 0, 0, 0.4); transition: all 0.5s ease; }
+.hud-wrapper.running .tech-tooth { box-shadow: inset 0 -4rpx 6rpx rgba(0, 191, 165, 0.3), inset 0 4rpx 4rpx rgba(255, 255, 255, 1), 0 4rpx 16rpx rgba(0, 230, 184, 0.2); }
+.t-incisor { width: 16rpx; height: 30rpx; border-radius: 6rpx; }
+.t-canine { width: 14rpx; height: 32rpx; border-radius: 6rpx 6rpx 8rpx 8rpx; }
+.t-premolar { width: 18rpx; height: 24rpx; border-radius: 8rpx; }
+.t-molar { width: 22rpx; height: 20rpx; border-radius: 8rpx; }
+.top-jaw .t-m-1 { transform: translateY(-16rpx); }
+.top-jaw .t-m-2 { transform: translateY(-8rpx); }
+.top-jaw .t-p-1 { transform: translateY(-4rpx); }
+.bottom-jaw .t-m-1 { transform: translateY(16rpx); }
+.bottom-jaw .t-m-2 { transform: translateY(8rpx); }
+.bottom-jaw .t-p-1 { transform: translateY(4rpx); }
+
+
+/* 第 1 层：定位外壳 */
+.tech-brush-wrapper {
+  position: absolute; opacity: 0; z-index: 20;
+  transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+  left: 100rpx; top: 180rpx;
+}
+.tech-brush-wrapper.stage-1, .tech-brush-wrapper.stage-2,
+.tech-brush-wrapper.stage-3, .tech-brush-wrapper.stage-4,
+.tech-brush-wrapper.stage-5, .tech-brush-wrapper.stage-6 { opacity: 1; }
+
+/* 第 2 层：平移容器 */
+.tech-brush-sweep { width: 100%; height: 100%; }
+
+/* 第 3 层：智能牙刷本体 */
+.tech-brush-inner {
+  width: 40rpx; height: 100rpx;
+  background: url("data:image/svg+xml,%3Csvg viewBox='0 0 40 100' xmlns='http://www.w3.org/2000/svg'%3E%3Crect x='14' y='25' width='12' height='70' rx='6' fill='%23FFFFFF' opacity='0.95'/%3E%3Crect x='12' y='5' width='16' height='20' rx='4' fill='%23FFFFFF'/%3E%3Crect x='4' y='7' width='10' height='16' rx='3' fill='%2300E6B8' opacity='0.9'/%3E%3C/svg%3E") no-repeat center;
+  background-size: contain;
+  filter: drop-shadow(0 6rpx 10rpx rgba(0, 0, 0, 0.6));
+  transition: transform 0.4s ease;
+}
+
+/* 阶段 1：上颌外侧 */
+.tech-brush-wrapper.stage-1 { left: 100rpx; top: 40rpx; }
+.tech-brush-wrapper.stage-1 .tech-brush-inner { transform: rotate(45deg); }
+.hud-wrapper.running .tech-brush-wrapper.stage-1 .tech-brush-sweep { animation: sweepUpper 5s ease-in-out infinite alternate; }
+.hud-wrapper.running .tech-brush-wrapper.stage-1 .tech-brush-inner { animation: bassVibrate 0.12s infinite alternate; }
+
+/* 阶段 2：上颌内侧 */
+.tech-brush-wrapper.stage-2 { left: 100rpx; top: 50rpx; transform: scale(0.8); filter: brightness(0.6); z-index: 5; }
+.tech-brush-wrapper.stage-2 .tech-brush-inner { transform: rotate(45deg); }
+.hud-wrapper.running .tech-brush-wrapper.stage-2 .tech-brush-sweep { animation: sweepUpper 5s ease-in-out infinite alternate; }
+.hud-wrapper.running .tech-brush-wrapper.stage-2 .tech-brush-inner { animation: bassVibrate 0.12s infinite alternate; }
+
+/* 阶段 3：下颌外侧 */
+.tech-brush-wrapper.stage-3 { left: 100rpx; top: 120rpx; }
+.tech-brush-wrapper.stage-3 .tech-brush-inner { transform: rotate(135deg); }
+.hud-wrapper.running .tech-brush-wrapper.stage-3 .tech-brush-sweep { animation: sweepLower 5s ease-in-out infinite alternate; }
+.hud-wrapper.running .tech-brush-wrapper.stage-3 .tech-brush-inner { animation: bassVibrate 0.12s infinite alternate; }
+
+/* 阶段 4：下颌内侧 */
+.tech-brush-wrapper.stage-4 { left: 100rpx; top: 110rpx; transform: scale(0.8); filter: brightness(0.6); z-index: 5; }
+.tech-brush-wrapper.stage-4 .tech-brush-inner { transform: rotate(135deg); }
+.hud-wrapper.running .tech-brush-wrapper.stage-4 .tech-brush-sweep { animation: sweepLower 5s ease-in-out infinite alternate; }
+.hud-wrapper.running .tech-brush-wrapper.stage-4 .tech-brush-inner { animation: bassVibrate 0.12s infinite alternate; }
+
+/* 阶段 5：上下咬合面 */
+.tech-brush-wrapper.stage-5 { left: 100rpx; top: 80rpx; transform: scale(0.9); }
+.tech-brush-wrapper.stage-5 .tech-brush-inner { transform: rotate(90deg); }
+.hud-wrapper.running .tech-brush-wrapper.stage-5 .tech-brush-sweep { animation: sweepOcclusal 4s ease-in-out infinite alternate; }
+.hud-wrapper.running .tech-brush-wrapper.stage-5 .tech-brush-inner { animation: scrubHorizontal 0.15s infinite alternate; }
+
+/* 阶段 6：门牙内侧与舌苔 */
+.tech-brush-wrapper.stage-6 { left: 100rpx; top: 70rpx; transform: scale(0.9); z-index: 15; }
+.tech-brush-wrapper.stage-6 .tech-brush-inner { transform: rotate(0deg); }
+.hud-wrapper.running .tech-brush-wrapper.stage-6 .tech-brush-sweep { animation: sweepFront 3s ease-in-out infinite alternate; }
+.hud-wrapper.running .tech-brush-wrapper.stage-6 .tech-brush-inner { animation: scrubVertical 0.25s infinite alternate; }
+
+@keyframes sweepUpper {
+  0% { transform: translate3d(-60rpx, 10rpx, 0); }
+  50% { transform: translate3d(0, -5rpx, 0); }
+  100% { transform: translate3d(60rpx, 10rpx, 0); }
+}
+@keyframes sweepLower {
+  0% { transform: translate3d(-50rpx, -10rpx, 0); }
+  50% { transform: translate3d(0, 5rpx, 0); }
+  100% { transform: translate3d(50rpx, -10rpx, 0); }
+}
+@keyframes sweepOcclusal {
+  0% { transform: translate3d(-60rpx, -20rpx, 0); }
+  100% { transform: translate3d(60rpx, 20rpx, 0); }
+}
+@keyframes sweepFront {
+  0% { transform: translate3d(-15rpx, 0, 0); }
+  100% { transform: translate3d(15rpx, 0, 0); }
+}
+
+@keyframes bassVibrate {
+  0% { margin-top: 0; margin-left: 0; }
+  100% { margin-top: -3rpx; margin-left: 3rpx; }
+}
+@keyframes scrubHorizontal {
+  0% { margin-left: -5rpx; }
+  100% { margin-left: 5rpx; }
+}
+@keyframes scrubVertical {
+  0% { margin-top: -8rpx; }
+  100% { margin-top: 8rpx; }
+}
+
+.time-display-wrapper { display: flex; flex-direction: column; align-items: center; margin-bottom: 6vh; }
+.time-display { font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; font-size: 140rpx; font-weight: 200; color: #FFFFFF; font-variant-numeric: tabular-nums; text-shadow: 0 4rpx 20rpx rgba(0, 0, 0, 0.5); line-height: 1; margin-bottom: 16rpx; }
+.sub-label { font-size: 24rpx; color: rgba(255,255,255,0.6); letter-spacing: 6rpx; font-weight: bold; }
+
+.controls-wrapper { display: flex; justify-content: space-between; width: 75%; gap: 40rpx; }
+.glass-btn { height: 110rpx; border-radius: 55rpx; display: flex; justify-content: center; align-items: center; backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); transition: all 0.2s ease; border: 2rpx solid rgba(255, 255, 255, 0.05); }
+.glass-btn:active { transform: scale(0.95); }
+.icon { font-size: 32rpx; margin-right: 12rpx; }
+.btn-txt { font-size: 30rpx; font-weight: 600; letter-spacing: 4rpx; }
+
+.btn-reset { flex: 1; background: rgba(255, 255, 255, 0.05); color: rgba(255, 255, 255, 0.8); }
+.btn-start { flex: 2; background: rgba(0, 230, 184, 0.15); border-color: rgba(0, 230, 184, 0.4); color: #00E6B8; box-shadow: 0 8rpx 32rpx rgba(0, 230, 184, 0.2); }
+.btn-pause { flex: 2; background: rgba(255, 171, 0, 0.15); border-color: rgba(255, 171, 0, 0.4); color: #FFAB00; box-shadow: 0 8rpx 32rpx rgba(255, 171, 0, 0.2); }

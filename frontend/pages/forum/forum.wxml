@@ -1,0 +1,91 @@
+<view class="forum-page">
+  <view class="post-btn" bindtap="showPostModal">✍️ 发布匿名求助</view>
+  
+  <scroll-view scroll-y class="post-list">
+    <view class="post-card" wx:for="{{posts}}" wx:key="id" wx:for-index="index">
+      <view class="post-header">
+        <view class="anon-avatar">🥷</view>
+        <view class="anon-info">
+          <text class="anon-name">匿名牙友_{{item.display_id || item.id || '某同学'}}</text>
+          <text class="post-time">{{item.time}}</text>
+        </view>
+        <view wx:if="{{item.isMine}}" class="delete-btn" bindtap="deletePost" data-index="{{index}}">🗑️ 删除</view>
+      </view>
+      
+      <view class="post-content">{{item.content}}</view>
+      
+      <view class="post-footer">
+        <view class="action-btn" bindtap="openComments" data-index="{{index}}">
+          <text class="emoji-icon">💬</text>
+          <text>{{item.comments}} 评论</text>
+        </view>
+        <view class="action-btn {{item.isLiked ? 'liked' : ''}}" bindtap="likePost" data-index="{{index}}">
+          <text class="emoji-icon">{{item.isLiked ? '❤️' : '👍'}}</text>
+          <text>{{item.likes}} 抱抱</text>
+        </view>
+      </view>
+    </view>
+  </scroll-view>
+
+  <page-container show="{{showCommentPanel}}" round position="bottom" bind:afterleave="closeComments">
+    <view class="comment-panel">
+      <view class="panel-header">
+        <text class="p-title">共 {{posts[currentPostIndex].comments}} 条评论</text>
+        <text class="p-close" bindtap="closeComments">✕</text>
+      </view>
+      
+      <scroll-view scroll-y class="comment-scroll">
+        <block wx:if="{{posts[currentPostIndex].commentList.length > 0}}">
+          <view class="c-item" wx:for="{{posts[currentPostIndex].commentList}}" wx:key="index" wx:for-item="comment" wx:for-index="cIndex">
+            <view class="c-avatar">🥷</view>
+            <view class="c-content">
+              <text class="c-name">{{comment.name}}</text>
+              <text class="c-text" bindtap="tapReply" data-name="{{comment.name}}">
+                <text wx:if="{{comment.replyTo}}" class="reply-tag">回复 @{{comment.replyTo}}：</text>{{comment.text}}
+              </text>
+              <view class="c-meta">
+                <text class="c-time">{{comment.time || '刚刚'}}</text>
+                <text wx:if="{{comment.isMine}}" class="c-delete" catchtap="deleteComment" data-cindex="{{cIndex}}">删除</text>
+              </view>
+            </view>
+
+            <view class="c-like-box" catchtap="likeComment" data-cindex="{{cIndex}}">
+              <text class="c-like-icon {{comment.isLiked ? 'liked' : ''}}">{{comment.isLiked ? '❤️' : '♡'}}</text>
+              <text class="c-like-num {{comment.isLiked ? 'liked' : ''}}">{{comment.likes > 0 ? comment.likes : '赞'}}</text>
+            </view>
+          </view>
+        </block>
+        <view wx:else class="empty-comment">暂无评论，快来抢沙发~</view>
+      </scroll-view>
+
+      <view class="panel-footer" style="margin-bottom: {{keyboardHeight}}px;">
+        <input class="comment-input" 
+               adjust-position="{{false}}" 
+               bindkeyboardheightchange="onKeyboardHeightChange"
+               bindblur="onInputBlur"
+               placeholder="{{replyTarget ? '回复 @' + replyTarget.name + '...' : '留友善言，结结牙缘...'}}" 
+               value="{{commentInput}}" 
+               bindinput="onCommentInput" 
+               focus="{{inputFocus}}" 
+               confirm-type="send" 
+               bindconfirm="submitComment" />
+        <button class="send-btn" bindtap="submitComment">发送</button>
+      </view>
+    </view>
+  </page-container>
+
+  <view class="post-mask" wx:if="{{showPostModal}}" bindtap="hidePostModal"></view>
+  <view class="create-panel {{showPostModal ? 'show' : ''}}">
+    <view class="cp-header">
+      <text class="cp-cancel" bindtap="hidePostModal">取消</text>
+      <text class="cp-title">发布匿名求助</text>
+      <text class="cp-publish" bindtap="submitPost">发布</text>
+    </view>
+    <textarea class="cp-textarea" 
+              placeholder="牙齿有什么烦恼？在这里匿名倾诉吧，大家都很友善..." 
+              value="{{postInput}}" 
+              bindinput="onPostInput"
+              maxlength="300"
+              focus="{{showPostModal}}"></textarea>
+  </view>
+</view>

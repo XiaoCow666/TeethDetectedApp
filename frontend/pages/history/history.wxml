@@ -1,0 +1,47 @@
+<view class="history-page">
+  <view class="patient-banner">
+    <text class="banner-icon">👤</text>
+    <text class="banner-text">{{currentName}} 的健康档案库</text>
+  </view>
+
+  <view class="action-bar">
+    <label class="select-all" bindtap="toggleSelectAll">
+      <checkbox checked="{{isSelectAll}}" color="#00BFA5" class="top-check" />
+      <text class="sel-txt">全选</text>
+    </label>
+    <view class="btn-group">
+      <view class="mini-btn download {{selectedIds.length === 0 ? 'disabled' : ''}}" bindtap="{{selectedIds.length === 0 ? '' : 'downloadBatch'}}">批量下载</view>
+      <view class="mini-btn delete {{selectedIds.length === 0 ? 'disabled' : ''}}" bindtap="{{selectedIds.length === 0 ? '' : 'deleteBatch'}}">删除</view>
+    </view>
+  </view>
+
+  <view class="empty-state" wx:if="{{records.length === 0}}">
+    <view class="empty-icon">📭</view>
+    <view>暂无该成员的检测记录</view>
+  </view>
+
+  <checkbox-group bindchange="onCheckboxChange">
+    <view class="record-item" wx:for="{{records}}" wx:key="_id">
+      <view class="check-box-wrapper">
+        <checkbox value="{{item._id}}" checked="{{item.checked}}" color="#00BFA5" class="item-check" />
+      </view>
+      
+      <view class="record-card" bindtap="goToReport" data-item="{{item}}">
+        <image class="thumb" src="{{item.imageFileID}}" mode="aspectFill" />
+        
+        <view class="info">
+          <view class="time">{{item.displayTime}}</view>
+          <view class="score">综合评分：<text class="{{item.report.health_score < 70 ? 'danger' : 'safe'}}">{{item.report.health_score}} 分</text></view>
+          <view class="summary">{{item.report.summary}}</view>
+          
+          <view class="ios-action-row">
+            <view class="ios-btn ios-down" catchtap="downloadSingle" data-id="{{item._id}}">↓ 下载</view>
+            <view class="ios-btn ios-del" catchtap="deleteSingle" data-id="{{item._id}}">🗑 删除</view>
+          </view>
+        </view>
+        <view class="arrow">〉</view>
+      </view>
+    </view>
+  </checkbox-group>
+</view>
+<canvas type="2d" id="historyCanvas" class="offscreen-canvas"></canvas>

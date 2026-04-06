@@ -1,78 +1,152 @@
-# Oral AI Health Screening (MVP)
+﻿# TeethDetectedApp
 
-> **从0到1、可落地、可交付的口腔 AI 筛查解决方案**。
-> 基于 YOLOv8-seg 与 规则引擎，实现"拍照 -> 识别 -> 报告"全流程。
+一个基于 YOLO 的口腔影像检测项目，仓库里同时包含：
 
-## 📁 目录结构
+- 微信小程序前端
+- FastAPI 推理后端
+- 训练与导出脚本
+- 训练、验证、测试数据
+- 已训练好的模型权重 `best.pt`
 
+当前项目的主链路是：
+
+1. 用户在小程序拍照或从相册选择口腔图片
+2. 小程序裁剪口腔区域后上传到后端 `/predict`
+3. 后端加载 `best.pt` 并返回检测框、标签、健康分数和摘要
+4. 小程序生成报告页，并把记录写入微信云开发数据库
+
+## 当前目录
+
+```text
+TeethDetectedApp/
+|-- api/                     # FastAPI 后端
+|   |-- main.py              # 当前实际使用的后端入口
+|-- frontend/                # 微信小程序
+|   |-- app.js
+|   |-- app.json
+|   |-- pages/
+|   |   |-- index/           # 首页
+|   |   |-- camera/          # 拍照与上传
+|   |   |-- report/          # 报告页
+|   |   |-- history/         # 历史记录
+|   |   |-- mine/            # 个人/家庭档案
+|   |   |-- timer/           # 刷牙计时器
+|   |   |-- brushStats/      # 刷牙统计
+|   |   |-- forum/           # 社区页
+|   |   |-- videoList/       # 科普视频流
+|   |   |-- chat/            # AI 问答
+|-- models/                  # 训练与导出脚本
+|   |-- train.py
+|   |-- export.py
+|-- data/                    # 数据采集/增强脚本
+|-- train/                   # 训练集
+|-- valid/                   # 验证集
+|-- test/                    # 测试集
+|-- data.yaml                # 当前数据集配置
+|-- best.pt                  # 当前推理使用的模型权重
+|-- requirements.txt
+|-- Dockerfile
+|-- docker-compose.yml
 ```
-oral-ai-mvp/
-├── data/               # [工具] 数据采集与增强
-│   ├── collect_data.py # 爬虫脚本 (Bing/Google)
-│   └── augment.py      # 增强脚本 (模拟手机拍摄)
-├── docs/               # [文档] 开发规范
-│   └── label_guidelines.md # 标注规范 (LabelStudio)
-├── models/             # [算法] 模型训练
-│   ├── train.py        # 训练脚本 (YOLOv8-seg)
-│   └── export.py       # 导出脚本 (ONNX)
-├── api/                # [后端] 推理服务
-│   ├── main.py         # FastAPI 入口
-│   └── core/engine.py  # 规则引擎 (AI->人话)
-├── frontend/           # [前端] 设计图
-│   └── design_spec.md  # 小程序开发逻辑
-├── Dockerfile          # 部署脚本
-└── docker-compose.yml  # 一键启动配置
-```
 
-## 🚀 快速开始 (Quick Start)
+## 后端说明
 
-### 1. 数据准备 (Data Pipeline)
-```bash
-# 1. 下载数据 (例如龋齿图片)
-python data/collect_data.py --keyword "dental caries intraoral" --num 500 --clean
+当前后端核心逻辑集中在 `api/main.py`：
 
-# 2. 标注数据
-# 使用 LabelStudio 按照 docs/label_guidelines.md 进行标注，导出为 YOLO 格式。
+- `GET /`：健康检查
+- `POST /predict`：接收图片并返回识别结果
+- 首次请求时懒加载 `best.pt`
+- 返回字段包含：
+  - `health_score`
+  - `summary`
+  - `issues`
+  - `bboxes`
+  - `meta.inference_ms`
+  - `has_teeth`
 
-# 3. 数据增强 (扩充数据量 5倍)
-python data/augment.py --input ./raw_data --output ./train_data --multiplier 5
-```
+## 前端说明
 
-### 2. 模型训练 (Training)
-```bash
-# 训练 YOLOv8-seg 模型
-python models/train.py --data data/oral.yaml --epochs 100
+微信小程序入口配置在 `frontend/app.json`。
 
-# 导出为 ONNX (用于生产环境)
-python models/export.py --weights runs/segment/train/weights/best.pt
-```
+当前页面列表：
 
-### 3. 启动服务 (Backend)
+- `pages/index/index`：首页
+- `pages/camera/camera`：拍照与上传
+- `pages/report/report`：检测报告
+- `pages/mine/mine`：个人中心
+- `pages/history/history`：历史记录
+- `pages/timer/timer`：刷牙计时器
+- `pages/forum/forum`：社区
+- `pages/videoList/videoList`：视频列表
+- `pages/brushStats/brushStats`：刷牙统计
+- `pages/chat/chat`：AI 问答
 
-**开发模式**:
+## 本地启动
+
+### 1. 安装依赖
+
 ```bash
 pip install -r requirements.txt
+```
+
+### 2. 启动后端
+
+```bash
 uvicorn api.main:app --reload
 ```
-API 文档地址: `http://localhost:8000/docs`
 
-**生产部署 (Docker)**:
+启动后可访问：
+
+- `http://127.0.0.1:8000/`
+- `http://127.0.0.1:8000/docs`
+
+### 3. 小程序
+
+使用微信开发者工具打开 `frontend/`。
+
+注意：
+
+- 小程序依赖微信云开发环境
+- 前端里已经写了云环境 ID 和线上推理地址
+- 如果切换环境，需要同步修改 `frontend/app.js` 与相关页面配置
+
+## 模型训练
+
+### 训练
+
 ```bash
-# 确保已经把 best.pt 放入 models/ 目录
+python models/train.py --data data.yaml --epochs 100 --device cpu
+```
+
+### 导出
+
+```bash
+python models/export.py --weights best.pt --format onnx
+```
+
+## 数据集说明
+
+当前 `data.yaml` 指向：
+
+- `train/images`
+- `valid/images`
+- `test/images`
+
+当前类别数为 2：
+
+- `Caries`
+- `Tooth`
+
+仓库里也保留了更大范围的项目设想和扩展页面，但实际模型配置仍以当前 `data.yaml` 和 `best.pt` 为准。
+
+## Docker
+
+```bash
 docker-compose up -d --build
 ```
-服务将在 `8000` 端口启动。
 
-## 🛠️ 技术栈
-*   **AI**: YOLOv8-segmentation (Ultralytics)
-*   **后端**: FastAPI, OpenCV, Uvicorn
-*   **部署**: Docker, ONNX Runtime
-*   **协作**: GitFlow Lite
+当前 `Dockerfile` 使用 `python:3.9-slim-bullseye`，并通过 `uvicorn` 暴露 `8000` 端口。
 
-## 📝 核心规则 (Rule Engine)
-本系统**不提供医疗诊断**。所有 AI 结果通过 `api/core/engine.py` 转化为风险提示：
-*   `class_2 (medium caries)` -> **中风险 (Medium Risk)**: 建议近期就医。
-*   `class_5 (heavy calculus)` -> **需洁牙 (Cleaning Needed)**: 建议洗牙。
+## 免责声明
 
-## ⚠️ 免责声明
-本工具仅供口腔健康初筛，**不能替代专业医生的临床诊断**。
+本项目用于口腔健康初筛与演示，不能替代专业医生诊断。

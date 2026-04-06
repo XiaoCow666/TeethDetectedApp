@@ -1,54 +1,97 @@
-<view class="home-container">
-  <swiper class="banner-swiper" indicator-dots="true" autoplay="true" circular="true" indicator-active-color="#00BFA5">
-    <swiper-item class="banner-item">
-      <view class="banner-card bg-green">
-        <text class="banner-title">AI 口腔筛查 3.0 发布</text>
-        <text class="banner-sub">9大类病变，毫秒级精准定位</text>
+<view class="page-container">
+  <view class="header-bg">
+    <view class="user-info" bindtap="goToMine">
+      <image class="avatar" src="{{userInfo.avatarUrl || '/assets/icons/mine.png'}}"></image>
+      <view class="text-info">
+        <text class="name">Hi, {{userInfo.realName || userInfo.nickName || '健康守护者'}} 👋</text>
+        <text class="subtitle">今天也要好好爱护牙齿哦 🦷 | 最新评分: <text class="score-highlight">{{latestScore}}</text> 分</text>
       </view>
-    </swiper-item>
-    <swiper-item class="banner-item" bindtap="showWIP">
-      <view class="banner-card bg-blue">
-        <text class="banner-title">新人专享 O2O 福利</text>
-        <text class="banner-sub">附近三甲牙医免费线上问诊</text>
-      </view>
-    </swiper-item>
-  </swiper>
-
-  <view class="nav-grid">
-    <view class="grid-item" bindtap="startScreening">
-      <view class="icon-box active-box"><text class="icon-txt">📷</text></view>
-      <text class="grid-name">AI 拍照筛查</text>
-    </view>
-
-    <view class="grid-item" bindtap="showWIP">
-      <view class="icon-box"><text class="icon-txt">🔦</text></view>
-      <text class="grid-name">实时内窥镜</text>
-      <text class="badge">硬件</text>
-    </view>
-
-    <view class="grid-item" bindtap="showWIP">
-      <view class="icon-box"><text class="icon-txt">🏥</text></view>
-      <text class="grid-name">附近诊所</text>
-    </view>
-
-    <view class="grid-item" bindtap="showWIP">
-      <view class="icon-box"><text class="icon-txt">🦷</text></view>
-      <text class="grid-name">3D 牙齿档案</text>
-      <text class="badge">Pro</text>
     </view>
   </view>
 
-  <view class="health-trend-card" bindtap="showWIP">
-    <view class="trend-header">
-      <text class="trend-title">我的口腔健康趋势</text>
-      <text class="arrow">查看详情 ></text>
+  <view class="main-content">
+    
+    <view class="banner-container">
+      <swiper class="banner-swiper" indicator-dots="true" indicator-active-color="#00BFA5" indicator-color="rgba(255,255,255,0.5)" autoplay="true" circular="true" interval="4000">
+        <swiper-item wx:for="{{banners}}" wx:key="title">
+          <view class="banner-item">
+            <image class="banner-img" src="{{item.image}}" mode="aspectFill"></image>
+            <view class="banner-mask"></view>
+            <view class="banner-text">
+              <text class="banner-title">{{item.title}}</text>
+              <text class="banner-subtitle">{{item.subtitle}}</text>
+            </view>
+          </view>
+        </swiper-item>
+      </swiper>
     </view>
-    <view class="trend-content">
-      <view class="trend-data">
-        <text class="score-up">上次筛查得分: 85</text>
-        <text class="hint">击败了全国 72% 的用户</text>
+
+    <view class="tips-card">
+      <text class="tips-icon">💡</text>
+      <text class="tips-text">{{dailyTip}}</text>
+    </view>
+
+    <view class="nav-grid">
+      <view class="grid-item" bindtap="startScreening">
+        <view class="icon-box active-box"><text class="icon-txt">📷</text></view>
+        <text class="grid-name">AI 影像识别</text>
       </view>
-      <view class="placeholder-chart">📊 动态图表生成中...</view>
+      
+      <view class="grid-item" bindtap="goToTimer">
+        <view class="icon-box"><text class="icon-txt">⏱️</text></view>
+        <text class="grid-name">刷牙计时</text>
+      </view>
+      <view class="grid-item" bindtap="goToHistory">
+        <view class="icon-box"><text class="icon-txt">📊</text></view>
+        <text class="grid-name">历史档案</text>
+      </view>
+      <view class="grid-item" bindtap="goToForum">
+        <view class="icon-box"><text class="icon-txt">💬</text></view>
+        <text class="grid-name">匿名牙友</text>
+      </view>
     </view>
+
+    <view class="health-trend-card">
+      <view class="trend-header">
+        <text class="trend-title">我的口腔健康趋势</text>
+        <text class="arrow" bindtap="goToHistory">管理记录 〉</text>
+      </view>
+      
+      <view class="trend-content" wx:if="{{hasData}}">
+        <canvas type="2d" id="trendChart" class="trend-canvas"></canvas>
+      </view>
+      <view class="empty-state" wx:else>
+        <text class="empty-icon">📊</text>
+        <text class="empty-text">暂无数据，快去进行第一次 AI 筛查吧</text>
+        <button class="btn-primary" bindtap="startScreening">立即检测</button>
+      </view>
+    </view>
+
+    <view class="section-header">
+      <view class="title-left">
+        <text class="icon-tv">📺</text>
+        <text class="main-title">口腔科普小课堂</text>
+      </view>
+      <view class="title-right" bindtap="showWIP">
+        <text class="more-text">查看全部</text>
+        <text class="arrow">></text>
+       </view>
+    </view>
+
+    <view class="video-list">
+      <view class="video-card" wx:for="{{videos}}" wx:key="id">
+        <video class="edu-video" src="{{item.url}}" poster="{{item.cover}}" title="{{item.title}}" preload="metadata" object-fit="cover" controls></video>
+        <view class="video-info">
+          <text class="video-title">{{item.title}}</text>
+          <view class="video-stats">
+            <text class="video-views">👁️ {{item.views}} 播放</text>
+            <button class="video-share-btn" open-type="share" data-video="{{item}}">
+              <text>↪️ 转发</text>
+            </button>
+          </view>
+        </view>
+      </view>
+    </view>
+
   </view>
 </view>

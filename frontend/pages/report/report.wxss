@@ -1,43 +1,45 @@
-.report-page { padding-bottom: 60rpx; background: #F5F7F7; min-height: 100vh; }
+.report-page { min-height: 100vh; background: #F5F7F7; padding-bottom: 80rpx; }
 
-/* 顶部计分板 */
-.score-header { padding: 60rpx 40rpx; text-align: center; color: #fff; border-bottom-left-radius: 40rpx; border-bottom-right-radius: 40rpx; box-shadow: 0 10rpx 30rpx rgba(0,0,0,0.1); }
-.healthy-bg { background: linear-gradient(135deg, #00BFA5 0%, #009688 100%); }
-.warning-bg { background: linear-gradient(135deg, #FFB74D 0%, #FF9800 100%); }
-.danger-bg { background: linear-gradient(135deg, #EF5350 0%, #F44336 100%); }
+.score-header { display: flex; flex-direction: column; align-items: center; padding: 60rpx 0; color: #fff; transition: background 0.3s; }
+.score-circle { width: 160rpx; height: 160rpx; border: 8rpx solid rgba(255,255,255,0.3); border-radius: 50%; display: flex; justify-content: center; align-items: center; margin-bottom: 20rpx; }
+.num { font-size: 64rpx; font-weight: bold; }
+.summary { font-size: 28rpx; opacity: 0.9; }
 
-.score-circle { width: 240rpx; height: 240rpx; border-radius: 50%; border: 12rpx solid rgba(255,255,255,0.3); margin: 0 auto; display: flex; align-items: baseline; justify-content: center; background: rgba(255,255,255,0.1); padding-top: 60rpx; box-sizing: border-box; }
-.score-circle .num { font-size: 110rpx; font-weight: bold; line-height: 1; }
-.score-circle .unit { font-size: 32rpx; margin-left: 10rpx; }
-.summary { display: block; margin-top: 30rpx; font-size: 30rpx; font-weight: 500; }
-.meta-info { font-size: 22rpx; opacity: 0.7; margin-top: 20rpx; }
+.card { background: #fff; margin: 30rpx; border-radius: 20rpx; padding: 30rpx; box-shadow: 0 4rpx 15rpx rgba(0,0,0,0.03); }
+.card-title { font-size: 32rpx; font-weight: bold; color: #333; margin-bottom: 24rpx; }
 
-/* 通用卡片样式 */
-.card { background: #fff; margin: 30rpx; border-radius: 24rpx; padding: 30rpx; box-shadow: 0 8rpx 24rpx rgba(0,0,0,0.04); }
-.card-title { font-size: 32rpx; font-weight: bold; color: #333; margin-bottom: 30rpx; display: flex; align-items: center; }
-.decor { width: 8rpx; height: 32rpx; background: #00BFA5; border-radius: 8rpx; margin-right: 16rpx; }
+/* 问题标签列表样式 */
+.issues-list { display: flex; flex-wrap: wrap; gap: 16rpx; }
+.issue-tag { background: rgba(255, 77, 79, 0.1); color: #FF4D4F; padding: 12rpx 24rpx; border-radius: 8rpx; font-size: 26rpx; font-weight: bold; border: 1rpx solid rgba(255, 77, 79, 0.3); }
 
-/* AI 识别画框核心 CSS */
-.image-wrapper { position: relative; width: 100%; font-size: 0; border-radius: 16rpx; overflow: hidden; }
+.image-wrapper { position: relative; width: 100%; border-radius: 12rpx; overflow: hidden; background: #000; display: block; }
 .origin-img { width: 100%; display: block; }
-.bbox { position: absolute; border: 4rpx solid #F44336; box-sizing: border-box; background: rgba(244, 67, 54, 0.15); border-radius: 6rpx; box-shadow: 0 0 10rpx rgba(244, 67, 54, 0.4); pointer-events: none; }
-.bbox-label { position: absolute; top: -40rpx; left: -4rpx; background: #F44336; color: #fff; font-size: 20rpx; font-weight: bold; padding: 4rpx 12rpx; border-radius: 8rpx 8rpx 8rpx 0; white-space: nowrap; }
-.image-tip { font-size: 22rpx; color: #999; display: block; text-align: center; margin-top: 20rpx; }
 
-/* 问题列表 */
-.issue-item { background: #F9FAFB; padding: 24rpx; border-radius: 16rpx; margin-bottom: 20rpx; }
-.issue-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12rpx; }
-.issue-name { font-size: 30rpx; font-weight: bold; }
-.issue-name.high { color: #F44336; }
-.issue-name.medium { color: #FF9800; }
-.issue-name.low { color: #00BFA5; }
-.issue-count { font-size: 24rpx; color: #888; background: #E0E0E0; padding: 4rpx 12rpx; border-radius: 20rpx; }
-.issue-action { font-size: 26rpx; color: #555; line-height: 1.5; }
-.action-label { font-weight: bold; color: #333; }
-.empty-state { text-align: center; padding: 40rpx; color: #00BFA5; font-weight: bold; }
-.footer-tip { text-align: center; font-size: 22rpx; color: #ccc; margin: 40rpx 0; }
-/* 商业转化按钮区 */
-.commercial-action-group { margin: 40rpx 30rpx; }
-.btn-o2o { background: #00BFA5; color: white; border-radius: 50rpx; font-weight: bold; font-size: 32rpx; height: 100rpx; line-height: 100rpx; margin-bottom: 30rpx; box-shadow: 0 10rpx 30rpx rgba(0,191,165,0.3); }
-.btn-pdf { background: #ffffff; color: #00BFA5; border: 2rpx solid #00BFA5; border-radius: 50rpx; font-weight: bold; font-size: 32rpx; height: 100rpx; line-height: 100rpx; }
-.btn-icon { margin-right: 10rpx; }
+.bbox { position: absolute; border: 4rpx solid #FF4D4F; box-sizing: border-box; }
+.bbox .label { position: absolute; left: -4rpx; top: -40rpx; background: rgba(255,77,79,0.9); color: #fff; font-size: 20rpx; padding: 4rpx 8rpx; font-weight: bold; border-top-left-radius: 8rpx; border-top-right-radius: 8rpx; white-space: nowrap; }
+
+.advice-content { font-size: 28rpx; color: #555; line-height: 1.6; text-align: justify; }
+
+.disclaimer-box { margin: 30rpx; padding: 30rpx; background: #FFF9C4; border-radius: 12rpx; border-left: 10rpx solid #FBC02D; }
+.disclaimer-box .title { display: block; font-weight: bold; color: #856404; font-size: 28rpx; margin-bottom: 10rpx; }
+.disclaimer-box .content { font-size: 24rpx; color: #856404; line-height: 1.6; }
+
+.btn-group { display: flex; justify-content: space-between; align-items: center; padding: 0 30rpx; margin-top: 60rpx; padding-bottom: calc(30rpx + env(safe-area-inset-bottom)); }
+.action-btn { flex: 1; height: 90rpx; line-height: 90rpx; font-size: 28rpx; border-radius: 45rpx; background: #00BFA5; color: #fff; font-weight: bold; text-align: center; }
+
+/* 🌟 新增：AI 悬浮按钮样式 */
+.ai-fab {
+  position: fixed;
+  bottom: 180rpx;
+  right: 30rpx;
+  background: linear-gradient(135deg, #00BFA5, #009688);
+  color: white;
+  padding: 20rpx 40rpx;
+  border-radius: 50rpx;
+  display: flex;
+  align-items: center;
+  box-shadow: 0 8rpx 20rpx rgba(0, 191, 165, 0.4);
+  z-index: 999;
+}
+.ai-fab .ai-icon { font-size: 36rpx; margin-right: 12rpx; }
+.ai-fab .ai-text { font-size: 28rpx; font-weight: bold; }
