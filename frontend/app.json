@@ -3,7 +3,13 @@
     "pages/index/index",
     "pages/camera/camera",
     "pages/report/report",
-    "pages/mine/mine"
+    "pages/mine/mine",
+    "pages/history/history",
+    "pages/timer/timer",
+    "pages/forum/forum",
+    "pages/videoList/videoList",
+    "pages/brushStats/brushStats",
+    "pages/chat/chat"
   ],
   "window": {
     "navigationBarTextStyle": "white",

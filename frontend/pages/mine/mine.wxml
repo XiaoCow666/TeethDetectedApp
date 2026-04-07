@@ -1,39 +1,55 @@
-<view class="mine-container">
-  <view class="header-card">
-    <button class="avatar-wrapper" open-type="chooseAvatar" bind:chooseavatar="onChooseAvatar">
-      <image class="avatar" src="{{userInfo.avatarUrl || 'https://mmbiz.qpic.cn/mmbiz/icTdbqWNOwNRna42FI242Lcia07jQodd2FJGIYQfG0LAJGFxM4FbnQP6yfMxBgJ0F3YRqJCJ1aPAK2dQagdusBZg/0'}}"></image>
+<view class="mine-page">
+  <view class="header">
+    <button class="avatar-btn" open-type="chooseAvatar" bindchooseavatar="onChooseAvatar">
+      <image class="avatar" src="{{userInfo.avatarUrl || '/assets/icons/mine.png'}}"></image>
+      <view class="edit-tip">点击修改头像</view>
     </button>
-    <view class="user-info">
-      <input type="nickname" class="nickname-input" placeholder="点击设置昵称" value="{{userInfo.nickName}}" bindblur="onNicknameChange"/>
-      <text class="user-desc">守护您的每一颗牙齿</text>
+  </view>
+
+  <view class="card">
+    <view class="card-title">📝 {{currentMode === '本人' ? '个人' : currentMode + '的'}}健康档案</view>
+    <view class="form-group">
+      <text class="label">真实姓名</text>
+      <input class="input" type="nickname" placeholder="将显示在检测报告上" value="{{userInfo.realName}}" bindinput="onNameInput" />
+    </view>
+    <view class="form-group">
+      <text class="label">性　　别</text>
+      <picker class="picker-wrap" bindchange="onGenderChange" value="{{genderIndex}}" range="{{genderArray}}">
+        <view class="picker {{userInfo.gender ? '' : 'placeholder'}}">
+          {{userInfo.gender || '请选择性别 〉'}}
+        </view>
+      </picker>
     </view>
   </view>
 
-  <view class="menu-list">
+  <view class="card menu-card">
+    <view class="menu-item" bindtap="switchToMain">
+      <text>👤 当前操作身份：<text style="color:#00BFA5; font-weight:bold;">{{currentMode}}</text></text>
+      <text class="arrow" wx:if="{{currentMode !== '本人'}}" style="color:#F44336;">点击切回本人 〉</text>
+    </view>
+    
     <view class="menu-item" bindtap="viewHistory">
-      <text class="menu-icon">📄</text>
-      <text class="menu-text">我的筛查记录</text>
-      <text class="arrow">></text>
-    </view>
-    <view class="menu-item" bindtap="contactUs">
-      <text class="menu-icon">💬</text>
-      <text class="menu-text">联系在线客服</text>
-      <text class="arrow">></text>
-    </view>
-        <view class="menu-item" bindtap="showWIP">
-      <text class="menu-icon">📷</text>
-      <text class="menu-text">绑定智能内窥镜 (Beta)</text>
-      <text class="arrow">未绑定 ></text>
-    </view>
-    <view class="menu-item" bindtap="showWIP">
-      <text class="menu-icon">👨‍👩‍👧</text>
-      <text class="menu-text">家庭口腔档案</text>
-      <text class="arrow">></text>
-    </view>
-    <view class="menu-item">
-      <text class="menu-icon">⚙️</text>
-      <text class="menu-text">隐私设置</text>
-      <text class="arrow">></text>
+      <text>📊 历史检测记录 ({{currentMode}})</text>
+      <text class="arrow">〉</text>
     </view>
   </view>
+
+  <view class="card">
+    <view class="card-title">👨‍👩‍👧‍👦 家庭成员</view>
+    <view class="family-list">
+      <view class="family-item" wx:for="{{familyProfiles}}" wx:key="id" bindtap="handleFamilyClick" data-item="{{item}}">
+        <view class="family-info">
+          <text class="family-name">{{item.name}}</text>
+          <text class="family-tag">家人</text>
+        </view>
+        <view class="family-arrow">
+          <text class="arrow-text">操作 〉</text>
+        </view>
+      </view>
+    </view>
+    <view class="add-family-btn" bindtap="addFamilyMember">
+      <text>＋ 添加家人 (老人/小孩)</text>
+    </view>
+  </view>
+
 </view>

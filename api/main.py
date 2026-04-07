@@ -5,7 +5,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from PIL import Image
 from ultralytics import YOLO
 
-app = FastAPI(title="Oral AI Diagnosis API", version="3.0-BBox")
+app = FastAPI(title="Oral AI Diagnosis API", version="3.0-BBox-LazyLoad")
 
 app.add_middleware(
     CORSMiddleware,
@@ -15,13 +15,15 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# 加载模型
+# 1：声明全局变量，但绝对不在这里加载模型！
 MODEL_PATH = "best.pt"
-try:
-    model = YOLO(MODEL_PATH)
-    print(f"✅ 成功加载 9 分类模型: {MODEL_PATH}")
-except Exception as e:
-    print(f"❌ 模型加载失败: {e}")
+model = None
+
+
+# 2：极速健康检查探针（云托管一敲门，立刻开门！）
+@app.get("/")
+def health_check():
+    return {"status": "success", "message": "Oral AI Backend is Running!"}
 
 
 class RuleEngine:
@@ -75,34 +77,46 @@ class RuleEngine:
             summary = "发现较多口腔病变痕迹，强烈建议尽快预约牙医！"
 
         return {"health_score": score, "summary": summary, "issues": issues_list}
-
-
 @app.post("/predict")
 async def predict(file: UploadFile = File(...)):
+    global model
     start_time = time.time()
-    image_bytes = await file.read()
-    image = Image.open(io.BytesIO(image_bytes)).convert("RGB")
 
-    results = model(image)
+    # 3：懒加载（Lazy Loading）
+    # 当第一个用户真正传照片过来时，才把 AI 模型唤醒到内存里
+    if model is None:
+        try:
+            print("首次调用，正在将 AI 载入内存...")
+            model = YOLO(MODEL_PATH)
+            print("模型载入成功！")
+        except Exception as e:
+            return {"error": f"模型加载失败: {str(e)}"}
 
-    predictions = []
-    bboxes = []  # 存储红框坐标
+    try:
+        image_bytes = await file.read()
+        image = Image.open(io.BytesIO(image_bytes)).convert("RGB")
 
-    for r in results:
-        if r.boxes:
-            for box in r.boxes:
-                class_id = int(box.cls[0])
-                class_name = model.names[class_id]
-                predictions.append(class_name)
+        results = model(image)
 
-                # 提取归一化坐标并过滤健康牙齿
-                if class_name != "healthytooth":
-                    xyxyn = box.xyxyn[0].tolist()
-                    cn_title = RuleEngine.DIAGNOSIS_RULES.get(class_name, {}).get("title", class_name)
-                    bboxes.append({"label": cn_title, "box": xyxyn})
+        predictions = []
+        bboxes = []
 
-    report = RuleEngine.analyze(predictions)
-    report["bboxes"] = bboxes  # 将坐标打包进报告
-    report["meta"] = {"inference_ms": round((time.time() - start_time) * 1000, 2)}
+        for r in results:
+            if r.boxes:
+                for box in r.boxes:
+                    class_id = int(box.cls[0])
+                    class_name = model.names[class_id]
+                    predictions.append(class_name)
 
-    return report
+                    if class_name != "healthytooth":
+                        xyxyn = box.xyxyn[0].tolist()
+                        cn_title = RuleEngine.DIAGNOSIS_RULES.get(class_name, {}).get("title", class_name)
+                        bboxes.append({"label": cn_title, "box": xyxyn})
+
+        report = RuleEngine.analyze(predictions)
+        report["bboxes"] = bboxes
+        report["meta"] = {"inference_ms": round((time.time() - start_time) * 1000, 2)}
+        report["has_teeth"] = len(predictions) > 0
+        return report
+    except Exception as e:
+        return {"error": f"推理过程中发生错误: {str(e)}"}

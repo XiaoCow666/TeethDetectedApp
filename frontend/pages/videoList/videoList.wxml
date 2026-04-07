@@ -1,0 +1,136 @@
+<view class="video-container">
+  <swiper class="video-swiper" vertical="true" bindchange="onSwiperChange" current="{{currentIndex}}" circular="false">
+    <swiper-item wx:for="{{videos}}" wx:key="_id">
+      
+      <view class="feed-item">
+        <view class="video-placeholder" wx:if="{{!item.url}}">
+          <text>视频解析中...</text>
+        </view>
+        <video 
+          wx:else
+          id="video_{{index}}" 
+          class="the-video" 
+          src="{{item.url}}" 
+          poster="{{item.cover}}"
+          preload="metadata"
+          object-fit="contain" 
+          loop="true"
+          show-fullscreen-btn="{{true}}"
+          show-play-btn="{{true}}"
+          controls="{{true}}"
+          autoplay="{{index === currentIndex}}"
+          custom-cache="{{false}}"
+        ></video>
+  
+        <view class="info-card">
+          <view class="author-row">
+            <image class="avatar" src="/assets/icons/科普.png"></image>
+            <text class="author-name">AI 口腔卫士</text>
+            <view class="follow-btn">+ 关注</view>
+          </view>
+          
+          <view class="title">{{item.title}}</view>
+          
+          <scroll-view scroll-y="true" class="desc-scroll">
+            <text class="desc">{{item.desc}}</text>
+          </scroll-view>
+          
+          <view class="action-row">
+            <view class="action-btn">
+              <text class="icon">🔥</text>
+              <text>{{item.views}}</text>
+            </view>
+            <view class="action-btn" bindtap="handleLike" data-index="{{index}}">
+              <text class="icon {{item.isLiked ? 'liked' : 'gray-heart'}}">❤️</text>
+              <text>{{item.likes}}</text>
+            </view>
+            <view class="action-btn" bindtap="openComment" data-index="{{index}}">
+              <text class="icon">💬</text>
+              <text>{{item.comments.length}}</text>
+            </view>
+            <button class="action-btn share-btn" open-type="share" data-video="{{item}}">
+              <text class="icon">↪️</text>
+              <text>分享</text>
+            </button>
+          </view>
+        </view>
+      </view>
+
+    </swiper-item>
+  </swiper>
+</view>
+
+<view class="comment-mask" wx:if="{{showComment}}" bindtap="closeComment"></view>
+<view class="comment-popup {{showComment ? 'show' : ''}}">
+  <view class="comment-header">
+    <text class="comment-title">{{videos[activeVideoIndex].comments.length}} 条评论</text>
+    <view class="comment-close" bindtap="closeComment">✕</view>
+  </view>
+  
+  <scroll-view scroll-y class="comment-list">
+    <view class="comment-item" wx:for="{{videos[activeVideoIndex].comments}}" wx:key="id" wx:for-item="cmt" wx:for-index="cIndex">
+      
+      <image class="cmt-avatar" src="{{cmt.avatar || '/assets/icons/mine.png'}}" binderror="onCmtAvatarError" data-cindex="{{cIndex}}"></image>
+      
+      <view class="cmt-main">
+        <text class="cmt-name">{{cmt.nickname}}</text>
+        <text class="cmt-content">{{cmt.content}}</text>
+        <view class="cmt-bottom">
+          <text class="cmt-time">{{cmt.time}}</text>
+          <text class="cmt-reply" bindtap="tapReply" data-cindex="{{cIndex}}" data-nickname="{{cmt.nickname}}">回复</text>
+          <text class="cmt-delete" wx:if="{{cmt.nickname === myName || cmt.nickname === '我'}}" bindtap="deleteComment" data-cindex="{{cIndex}}">删除</text>
+        </view>
+
+        <view class="cmt-replies-box" wx:if="{{cmt.replies && cmt.replies.length > 0}}">
+          <view class="toggle-replies" bindtap="toggleReplies" data-cindex="{{cIndex}}">
+            <view class="line"></view>
+            <text class="toggle-txt">{{cmt.showReplies ? '收起回复' : '展开 ' + cmt.replies.length + ' 条回复'}}</text>
+            <text class="arrow {{cmt.showReplies ? 'up' : 'down'}}"></text>
+          </view>
+
+          <view class="replies-list" wx:if="{{cmt.showReplies}}">
+            <view class="reply-item" wx:for="{{cmt.replies}}" wx:key="id" wx:for-item="reply" wx:for-index="rIndex">
+              <image class="reply-avatar" src="{{reply.avatar || '/assets/icons/mine.png'}}" binderror="onReplyAvatarError" data-cindex="{{cIndex}}" data-rindex="{{rIndex}}"></image>
+              <view class="reply-main">
+                <view class="reply-name">
+                  {{reply.nickname}} 
+                  <text class="reply-to" wx:if="{{reply.replyTo && reply.replyTo !== cmt.nickname}}">▶ {{reply.replyTo}}</text>
+                </view>
+                <text class="reply-content">{{reply.content}}</text>
+                <view class="reply-bottom">
+                  <text class="cmt-time">{{reply.time}}</text>
+                  <text class="cmt-reply" bindtap="tapReply" data-cindex="{{cIndex}}" data-nickname="{{reply.nickname}}">回复</text>
+                  <text class="cmt-delete" wx:if="{{reply.nickname === myName || reply.nickname === '我'}}" bindtap="deleteReply" data-cindex="{{cIndex}}" data-rindex="{{rIndex}}">删除</text>
+                </view>
+              </view>
+            </view>
+          </view>
+        </view>
+
+      </view>
+
+      <view class="cmt-right-actions">
+        <view class="cmt-action-btn {{cmt.isLiked ? 'active-red' : 'gray-heart-btn'}}" bindtap="likeComment" data-cindex="{{cIndex}}">
+          <text class="action-icon">❤️</text>
+          <text class="action-num">{{cmt.likeCount || '赞'}}</text>
+        </view>
+      </view>
+
+    </view>
+    <view class="no-more">没有更多评论了~</view>
+  </scroll-view>
+
+  <view class="comment-input-area" style="bottom: {{keyboardHeight}}px;">
+    <input class="comment-input" 
+           adjust-position="{{false}}" 
+           bindkeyboardheightchange="onKeyboardHeightChange"
+           bindblur="onInputBlur"
+           placeholder="{{replyTargetName ? '回复 @' + replyTargetName + ' :' : '留下你的善意评论...'}}" 
+           value="{{commentInput}}" 
+           bindinput="onCommentInput" 
+           focus="{{inputFocus}}"
+           confirm-type="send" 
+           bindconfirm="submitComment" />
+    <button class="send-btn" bindtap="submitComment">发送</button>
+  </view>
+</view>

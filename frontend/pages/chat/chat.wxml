@@ -1,0 +1,32 @@
+<view class="chat-page">
+  <scroll-view class="chat-scroll" scroll-y="true" scroll-into-view="{{bottomId}}" scroll-with-animation="true">
+    <block wx:for="{{displayList}}" wx:key="index">
+      
+      <view class="welcome-card" wx:if="{{index === 0 && item.role === 'assistant'}}">
+        <view class="welcome-header">
+          <image class="welcome-avatar" src="https://img.icons8.com/color/96/000000/medical-doctor.png"></image>
+          <text class="welcome-title">SmileGuard 护齿管家</text>
+        </view>
+        <view class="welcome-divider"></view>
+        <view class="welcome-content">
+          <text user-select="true">{{item.content}}</text>
+        </view>
+      </view>
+
+      <view class="message-row ai-row" wx:elif="{{item.role === 'assistant'}}">
+        <view class="bubble ai-bubble"><text user-select="true">{{item.content}}</text></view>
+      </view>
+
+      <view class="message-row user-row" wx:elif="{{item.role === 'user'}}">
+        <view class="bubble user-bubble"><text user-select="true">{{item.content}}</text></view>
+      </view>
+
+    </block>
+    <view id="bottom-anchor" style="height: 40rpx;"></view>
+  </scroll-view>
+
+  <view class="input-bar">
+    <input class="chat-input" value="{{inputValue}}" placeholder="问问关于你的牙齿问题..." bindinput="onInput" bindconfirm="sendMessage" confirm-type="send" />
+    <button class="send-btn {{inputValue ? 'active' : ''}}" bindtap="sendMessage">发送</button>
+  </view>
+</view>

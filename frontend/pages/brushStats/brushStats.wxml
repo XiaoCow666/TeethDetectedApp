@@ -1,0 +1,48 @@
+<view class="stats-page">
+  <view class="overview-panel">
+    <view class="overview-item">
+      <text class="value">{{totalDays}}</text>
+      <text class="label">累计天数</text>
+    </view>
+    <view class="overview-item">
+      <text class="value">{{todayTimes}}</text>
+      <text class="label">今日次数</text>
+    </view>
+    <view class="overview-item">
+      <text class="value">{{avgDuration}}</text>
+      <text class="label">平均时长(秒)</text>
+    </view>
+  </view>
+
+  <view class="chart-panel">
+    <view class="panel-title">
+      <text class="icon">📈</text> 近7日刷牙时长趋势
+    </view>
+    <view class="canvas-container">
+      <canvas type="2d" id="brushChart" class="brush-canvas"></canvas>
+    </view>
+  </view>
+
+  <view class="list-panel">
+    <view class="panel-title">
+      <text class="icon">📝</text> 最近记录
+    </view>
+    <view class="record-list" wx:if="{{records.length > 0}}">
+      <view class="record-item" wx:for="{{records}}" wx:key="_id">
+        <view class="record-left">
+          <text class="record-icon">🪥</text>
+          <view class="record-info">
+            <text class="record-date">{{item.displayDate}}</text>
+            <text class="record-time">{{item.displayTime}}</text>
+          </view>
+        </view>
+        <view class="record-right">
+          <text class="duration-tag {{item.duration >= 120 ? 'perfect' : 'good'}}">{{item.duration}} 秒</text>
+        </view>
+      </view>
+    </view>
+    <view class="empty-tip" wx:else>
+      暂无记录，快去开启你的第一次护齿向导吧！
+    </view>
+  </view>
+</view>

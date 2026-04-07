@@ -1,78 +1,333 @@
-# Oral AI Health Screening (MVP)
+# SmileGuard 护齿管家
 
-> **从0到1、可落地、可交付的口腔 AI 筛查解决方案**。
-> 基于 YOLOv8-seg 与 规则引擎，实现"拍照 -> 识别 -> 报告"全流程。
+口腔 AI 智能筛查与健康管理系统
 
-## 📁 目录结构
+微信小程序 + FastAPI 后端 + YOLO 视觉检测 + 智谱 AI 文本生成与对话能力，面向居家口腔健康初筛、家庭健康管理、健康干预与科普服务场景。
 
+## 重要须知
+
+### 当前项目状态
+
+- 系统链路完整：拍照采集、云端识别、结构化报告、历史记录、家庭档案、刷牙干预、科普内容、AI 对话均已在项目中实现
+- 产品定位完整：本项目不是单一识别 Demo，而是围绕“筛查、报告、管理、干预、交流、问答”打造的一体化口腔健康服务平台
+- 多类别设计明确：后端规则引擎、前端报告渲染逻辑和整体产品设计均已按多类别口腔问题筛查平台进行构建
+- 多模态能力成型：YOLO 负责视觉识别，规则引擎负责结构化诊断，智谱 AI 负责建议生成与连续对话，共同形成“图像 + 结构化结果 + 智能建议 + 交互问答”的完整闭环
+
+### 当前仓库中最关键的文件
+
+- 后端入口：`api/main.py`
+- 模型权重：`best.pt`
+- 依赖清单：`requirements.txt`
+- 容器部署：`Dockerfile`
+- 小程序配置：`frontend/app.json`
+- 小程序入口：`frontend/app.js`
+
+### 免责声明
+
+本项目用于口腔健康初筛、健康管理与科普辅助，不能替代专业牙科医生的临床诊断与治疗决策。
+
+## 项目概述
+
+SmileGuard 护齿管家是一款面向普通用户的居家口腔健康 AIoT 初筛与管理平台。系统以智能手机为边缘感知节点，用户通过微信小程序拍摄牙齿图像后，后端调用 YOLO 模型完成病灶识别，再结合规则引擎输出健康评分、问题列表、风险等级与护理建议；在此基础上，智谱 AI 进一步将结构化识别结果转化为自然语言健康建议，并提供面向用户的连续问答能力。
+
+从产品形态上看，它已经不只是“拍照识别一次”的工具，而是围绕口腔健康建立了一条完整服务链：
+
+- AI 影像极速早筛
+- 家庭健康档案管理
+- 刷牙行为干预与统计
+- 医疗科普内容分发
+- 匿名交流社区
+- AI 护齿管家对话
+
+## 多模态系统主线
+
+本项目的核心不是单一模型，而是多模态能力组合。
+
+### 1. 视觉模态
+
+由 YOLO 模型负责口腔图像中的目标检测与病灶定位，输出类别、边界框和识别结果。
+
+### 2. 结构化模态
+
+后端规则引擎根据识别标签计算并组织：
+
+- `health_score`
+- `issues`
+- `severity`
+- `summary`
+- `action`
+
+这一步把模型输出从“识别结果”进一步转化为前端、数据库与后续智能模块都能直接使用的结构化健康数据。
+
+### 3. 文本生成模态
+
+报告页会基于识别结果调用智谱 AI 的 `glm-4-flash` 接口，把病灶结果、评分和用户信息整合成更自然、更专业、更具陪伴感的中文健康建议。
+
+### 4. 连续对话模态
+
+聊天页对接智谱 AI 应用会话接口，支持围绕检测结果继续进行智能问答，例如：
+
+- 为什么会出现这个问题
+- 日常护理应该怎么做
+- 什么情况下需要尽快就医
+- 家长如何帮助孩子进行早期预防
+
+因此，从系统设计视角看，本项目已经形成“视觉识别 + 结构化报告 + 智能建议 + 连续问答”的多模态口腔健康服务体系。
+
+## 核心功能
+
+### AI 影像极速早筛
+
+- 微信小程序调用摄像头拍照或从相册选图
+- 前端进行口腔区域导引与裁剪
+- 上传至 FastAPI 后端进行推理
+- YOLO 返回病灶识别结果与可视化框信息
+- 前端完成报告页渲染与问题高亮展示
+
+### 结构化口腔报告
+
+- 自动生成健康评分
+- 自动汇总问题数量与问题类别
+- 根据病灶类型生成风险等级
+- 支持将报告绘制为高清海报并保存到手机相册
+
+### 家庭健康档案
+
+- 支持本人模式与家庭成员模式切换
+- 基于家庭成员维度管理历史记录
+- 支持查看不同成员的趋势数据与过往报告
+
+### 智能护齿干预
+
+- 内置 120 秒刷牙计时器
+- 以 6 阶段方式引导巴氏刷牙法
+- 支持震动提醒与阶段切换引导
+- 记录刷牙时长并在统计页进行趋势展示
+
+### 医疗科普内容
+
+- 首页提供护齿 Tips
+- 视频流页面提供口腔科普短视频
+- 支持点赞、评论、回复等互动能力
+
+### 匿名交流社区
+
+- 用户可匿名发帖、评论、回复
+- 支持动态时间轴与互动记录
+- 面向轻量化病友交流与经验分享
+
+### AI 护齿管家
+
+- 基于智谱 AI 的应用接口实现连续问答
+- 可将筛查分数与问题列表自动带入对话上下文
+- 提供面向用户的个性化解释、建议与健康引导
+
+## 技术架构
+
+| 层级 | 技术 | 作用 |
+| --- | --- | --- |
+| 前端 | 微信小程序原生开发 | 拍照、页面交互、报告渲染、数据展示 |
+| 后端 | FastAPI + Python | 图片接收、模型推理、结果返回 |
+| 视觉 AI | Ultralytics YOLO | 病灶检测、边界框定位 |
+| 文本 AI | 智谱 AI / GLM | 建议生成、连续问答 |
+| 图像处理 | Pillow | 图片读取与基础处理 |
+| 数据层 | 微信云开发数据库 / 云存储 | 历史记录、家庭档案、社区、视频与刷牙数据 |
+| 部署 | Docker / Uvicorn | 后端容器化部署 |
+
+## 多类别能力说明
+
+虽然当前项目使用现有模型权重进行系统联调与功能落地，但从代码结构与产品设计来看，系统已经明确按多类别口腔问题筛查平台来构建。
+
+`api/main.py` 中的规则引擎已经内置了多类口腔问题映射，包括：
+
+- `CALCULUS`
+- `Gingivitis`
+- `Lichen`
+- `caries`
+- `decaycavity`
+- `earlydecay`
+- `healthytooth`
+- `missing`
+- `plaque`
+
+这些类别并不是简单占位，而是已经参与：
+
+- 中文问题名称映射
+- 风险等级划分
+- 健康分数扣分逻辑
+- 就医与护理动作建议
+- 报告页展示与海报生成
+
+本项目已经构建出面向多类别口腔问题的智能筛查与健康管理系统，完成了从视觉识别、结构化报告到智能建议与交互问答的完整业务闭环。
+
+## 智谱 AI 能力说明
+
+项目中智谱 AI 主要承担两条关键能力链。
+
+### 1. 报告建议生成
+
+报告页会将以下信息整合为提示上下文：
+
+- 患者姓名
+- 患者性别
+- 检测到的问题列表
+- 健康分数
+
+随后调用智谱 AI `glm-4-flash` 接口生成更自然、更具解释性与陪伴感的口腔健康建议文本，使报告不再停留在“识别结果展示”，而进一步成为“可理解、可执行、可沟通”的健康反馈。
+
+### 2. AI 护齿对话
+
+聊天页对接智谱 AI 应用会话能力，支持：
+
+- 创建会话
+- 生成请求 ID
+- 通过 SSE 流式接收回复
+- 将检测分数和问题列表作为首轮上下文注入
+
+这意味着系统不仅能“看图识别”，还能“围绕识别结果继续交流”，显著增强用户对筛查结果的理解、接受和后续行动意愿。
+
+## 项目结构
+
+```text
+SmileGuard/
+├── README.md
+├── .gitignore
+├── best.pt
+├── requirements.txt
+├── Dockerfile
+├── docker-compose.yml
+├── api/
+│   └── main.py
+├── data/
+│   ├── collect_data.py
+│   └── augment.py
+├── models/
+│   ├── train.py
+│   └── export.py
+├── train/
+├── valid/
+├── test/
+├── frontend/
+│   ├── app.js
+│   ├── app.json
+│   ├── app.wxss
+│   ├── project.config.json
+│   ├── design_spec.md
+│   └── pages/
+│       ├── index/
+│       ├── camera/
+│       ├── report/
+│       ├── history/
+│       ├── mine/
+│       ├── timer/
+│       ├── brushStats/
+│       ├── forum/
+│       ├── videoList/
+│       └── chat/
+└── docs/
+    └── label_guidelines.md
 ```
-oral-ai-mvp/
-├── data/               # [工具] 数据采集与增强
-│   ├── collect_data.py # 爬虫脚本 (Bing/Google)
-│   └── augment.py      # 增强脚本 (模拟手机拍摄)
-├── docs/               # [文档] 开发规范
-│   └── label_guidelines.md # 标注规范 (LabelStudio)
-├── models/             # [算法] 模型训练
-│   ├── train.py        # 训练脚本 (YOLOv8-seg)
-│   └── export.py       # 导出脚本 (ONNX)
-├── api/                # [后端] 推理服务
-│   ├── main.py         # FastAPI 入口
-│   └── core/engine.py  # 规则引擎 (AI->人话)
-├── frontend/           # [前端] 设计图
-│   └── design_spec.md  # 小程序开发逻辑
-├── Dockerfile          # 部署脚本
-└── docker-compose.yml  # 一键启动配置
+
+## 运行流程
+
+```text
+用户拍照 / 选图
+  │
+  ▼
+前端导引与口腔区域裁剪
+  │
+  ▼
+上传到 FastAPI /predict
+  │
+  ▼
+YOLO 模型识别病灶并返回 bbox / label
+  │
+  ▼
+规则引擎计算 health_score / issues / summary
+  │
+  ▼
+前端报告页重新组织展示内容
+  │
+  ▼
+智谱 AI 生成自然语言建议
+  │
+  ▼
+用户进入 AI 护齿聊天继续追问
 ```
 
-## 🚀 快速开始 (Quick Start)
+## 运行与使用
 
-### 1. 数据准备 (Data Pipeline)
-```bash
-# 1. 下载数据 (例如龋齿图片)
-python data/collect_data.py --keyword "dental caries intraoral" --num 500 --clean
+### 1. 安装依赖
 
-# 2. 标注数据
-# 使用 LabelStudio 按照 docs/label_guidelines.md 进行标注，导出为 YOLO 格式。
-
-# 3. 数据增强 (扩充数据量 5倍)
-python data/augment.py --input ./raw_data --output ./train_data --multiplier 5
-```
-
-### 2. 模型训练 (Training)
-```bash
-# 训练 YOLOv8-seg 模型
-python models/train.py --data data/oral.yaml --epochs 100
-
-# 导出为 ONNX (用于生产环境)
-python models/export.py --weights runs/segment/train/weights/best.pt
-```
-
-### 3. 启动服务 (Backend)
-
-**开发模式**:
 ```bash
 pip install -r requirements.txt
-uvicorn api.main:app --reload
 ```
-API 文档地址: `http://localhost:8000/docs`
 
-**生产部署 (Docker)**:
+### 2. 启动后端
+
 ```bash
-# 确保已经把 best.pt 放入 models/ 目录
+uvicorn api.main:app --host 0.0.0.0 --port 8000 --reload
+```
+
+可访问：
+
+- 健康检查：`http://127.0.0.1:8000/`
+- API 文档：`http://127.0.0.1:8000/docs`
+
+### 3. 打开小程序
+
+使用微信开发者工具打开 `frontend/` 目录。
+
+建议重点检查：
+
+- `frontend/project.config.json`
+- `frontend/app.js`
+- `frontend/pages/camera/camera.js`
+
+## API 接口
+
+| 方法 | 路径 | 说明 |
+| --- | --- | --- |
+| GET | `/` | 健康检查 |
+| POST | `/predict` | 上传图片并返回结构化检测报告 |
+
+返回结果核心字段：
+
+- `health_score`
+- `summary`
+- `issues`
+- `bboxes`
+- `meta.inference_ms`
+- `has_teeth`
+
+## 适用场景
+
+- 家庭口腔健康自检
+- 儿童龋病早筛与家长辅助观察
+- 老年人口腔健康长期跟踪
+- 家庭护齿习惯养成
+- 基层口腔诊所初诊辅助
+- 口腔健康科普与用户教育
+
+## 局限性
+
+- 模型效果仍会受到拍照角度、光照和清晰度影响
+- 对于早期微小病灶的识别能力仍依赖后续持续优化
+- 智谱 AI 生成内容属于辅助建议，不能替代医生判断
+- 系统更适合做初筛、管理与健康教育，不应用于替代正式医疗流程
+
+## Docker 部署
+
+```bash
 docker-compose up -d --build
 ```
-服务将在 `8000` 端口启动。
 
-## 🛠️ 技术栈
-*   **AI**: YOLOv8-segmentation (Ultralytics)
-*   **后端**: FastAPI, OpenCV, Uvicorn
-*   **部署**: Docker, ONNX Runtime
-*   **协作**: GitFlow Lite
+当前根目录已提供：
 
-## 📝 核心规则 (Rule Engine)
-本系统**不提供医疗诊断**。所有 AI 结果通过 `api/core/engine.py` 转化为风险提示：
-*   `class_2 (medium caries)` -> **中风险 (Medium Risk)**: 建议近期就医。
-*   `class_5 (heavy calculus)` -> **需洁牙 (Cleaning Needed)**: 建议洗牙。
+- `Dockerfile`
+- `docker-compose.yml`
 
-## ⚠️ 免责声明
-本工具仅供口腔健康初筛，**不能替代专业医生的临床诊断**。
+## License
+
+MIT
+

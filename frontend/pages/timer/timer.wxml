@@ -1,0 +1,80 @@
+<view class="premium-timer-page">
+  
+  <view class="stats-entry-btn" bindtap="goToStats">
+    <text class="icon">📊</text>
+  </view>
+
+  <view class="stage-container">
+    <view class="stage-bar {{currentStage >= 1 ? 'active' : ''}}"></view>
+    <view class="stage-bar {{currentStage >= 2 ? 'active' : ''}}"></view>
+    <view class="stage-bar {{currentStage >= 3 ? 'active' : ''}}"></view>
+    <view class="stage-bar {{currentStage >= 4 ? 'active' : ''}}"></view>
+    <view class="stage-bar {{currentStage >= 5 ? 'active' : ''}}"></view>
+    <view class="stage-bar {{currentStage >= 6 ? 'active' : ''}}"></view>
+  </view>
+
+  <view class="instruction-box">
+    <text class="instruction-text">{{instruction}}</text>
+  </view>
+
+  <view class="hud-wrapper {{isRunning ? 'running' : ''}}">
+    
+    <view class="clean-ring outer-ring"></view>
+    <view class="clean-ring inner-ring"></view>
+
+    <view class="hologram-display">
+      
+      <view class="tech-mouth">
+        <view class="tech-jaw top-jaw">
+          <view class="tech-tooth t-molar t-m-1"></view>
+          <view class="tech-tooth t-molar t-m-2"></view>
+          <view class="tech-tooth t-premolar t-p-1"></view>
+          <view class="tech-tooth t-canine"></view>
+          <view class="tech-tooth t-incisor"></view>
+          <view class="tech-tooth t-incisor"></view>
+          <view class="tech-tooth t-canine"></view>
+          <view class="tech-tooth t-premolar t-p-1"></view>
+          <view class="tech-tooth t-molar t-m-2"></view>
+          <view class="tech-tooth t-molar t-m-1"></view>
+        </view>
+        <view class="tech-jaw bottom-jaw">
+          <view class="tech-tooth t-molar t-m-1"></view>
+          <view class="tech-tooth t-molar t-m-2"></view>
+          <view class="tech-tooth t-premolar t-p-1"></view>
+          <view class="tech-tooth t-canine"></view>
+          <view class="tech-tooth t-incisor"></view>
+          <view class="tech-tooth t-incisor"></view>
+          <view class="tech-tooth t-canine"></view>
+          <view class="tech-tooth t-premolar t-p-1"></view>
+          <view class="tech-tooth t-molar t-m-2"></view>
+          <view class="tech-tooth t-molar t-m-1"></view>
+        </view>
+      </view>
+
+      <view class="tech-brush-wrapper stage-{{currentStage}}">
+        <view class="tech-brush-sweep">
+          <view class="tech-brush-inner"></view>
+        </view>
+      </view>
+
+    </view>
+  </view>
+
+  <view class="time-display-wrapper">
+    <view class="time-display">{{timeString}}</view>
+    <view class="sub-label">标准巴氏刷牙法引擎</view>
+  </view>
+
+  <view class="controls-wrapper">
+    <view class="glass-btn btn-reset" bindtap="resetTimer">
+      <text class="icon">⎌</text>
+      <text class="btn-txt">重置</text>
+    </view>
+    
+    <view class="glass-btn btn-primary {{isRunning ? 'btn-pause' : 'btn-start'}}" bindtap="toggleTimer">
+      <text class="icon">{{isRunning ? '⏸' : '▶'}}</text>
+      <text class="btn-txt">{{isRunning ? '暂停运行' : (timeLeft == 120 ? '启动系统' : '恢复运行')}}</text>
+    </view>
+  </view>
+
+</view>

@@ -1,0 +1,66 @@
+.chat-page { display: flex; flex-direction: column; height: 100vh; background: #F4F6F8; }
+
+.chat-scroll { flex: 1; padding: 40rpx 30rpx; box-sizing: border-box; }
+
+/* ================= 1. 欢迎大卡片专属样式 ================= */
+.welcome-card {
+  background: #FFFFFF;
+  border-radius: 24rpx;
+  padding: 40rpx;
+  margin-bottom: 50rpx;
+  box-shadow: 0 8rpx 30rpx rgba(0, 191, 165, 0.08); /* 淡淡的主题色光晕 */
+  border: 1rpx solid #E8F5E9;
+}
+.welcome-header { display: flex; align-items: center; }
+.welcome-avatar { width: 72rpx; height: 72rpx; border-radius: 50%; margin-right: 20rpx; background: #F5F7F7; padding: 4rpx;}
+.welcome-title { font-size: 34rpx; font-weight: bold; color: #2C3E50; }
+.welcome-divider { height: 2rpx; background: #F0F2F5; margin: 30rpx 0; }
+.welcome-content { font-size: 30rpx; color: #4A5568; line-height: 1.7; text-align: justify; }
+
+
+/* ================= 2. 极简聊天气泡流 ================= */
+.message-row { display: flex; margin-bottom: 40rpx; width: 100%; }
+
+/* AI 气泡（靠左） */
+.ai-row { justify-content: flex-start; }
+.ai-bubble { 
+  background: #FFFFFF; 
+  color: #333333; 
+  /* 🌟 高级感核心：只有左下角是稍微直一点的角，其余都是大圆角 */
+  border-radius: 24rpx 24rpx 24rpx 8rpx; 
+  box-shadow: 0 4rpx 16rpx rgba(0,0,0,0.03); 
+  border: 1rpx solid #EAECEF;
+}
+
+/* 用户气泡（靠右） */
+.user-row { justify-content: flex-end; }
+.user-bubble { 
+  background: #00BFA5; 
+  color: #FFFFFF; 
+  /* 🌟 右下角直一点，呼应 AI 的气泡 */
+  border-radius: 24rpx 24rpx 8rpx 24rpx; 
+  box-shadow: 0 6rpx 20rpx rgba(0, 191, 165, 0.25); 
+}
+
+.bubble { max-width: 80%; padding: 26rpx 36rpx; font-size: 30rpx; line-height: 1.6; word-break: break-all; }
+
+
+/* ================= 3. 底部输入框 ================= */
+.input-bar { 
+  display: flex; align-items: center; 
+  padding: 20rpx 30rpx; 
+  background: #FFFFFF; 
+  border-top: 1rpx solid #EAEAEA; 
+  padding-bottom: calc(20rpx + env(safe-area-inset-bottom)); 
+}
+.chat-input { 
+  flex: 1; height: 80rpx; background: #F4F6F8; 
+  border-radius: 40rpx; padding: 0 40rpx; font-size: 28rpx; 
+}
+.send-btn { 
+  margin-left: 20rpx; width: 140rpx !important; height: 80rpx; 
+  border-radius: 40rpx; background: #E0E0E0; color: #fff; 
+  font-size: 28rpx; display: flex; align-items: center; justify-content: center; 
+  padding: 0; transition: all 0.3s;
+}
+.send-btn.active { background: #00BFA5; box-shadow: 0 4rpx 12rpx rgba(0, 191, 165, 0.3); }

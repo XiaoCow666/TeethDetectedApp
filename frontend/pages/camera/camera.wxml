@@ -1,7 +1,55 @@
-<view class="camera-page">
-  <view class="guide-frame">
-    <view class="frame-border"></view>
-    <text class="guide-tip">请将牙齿对齐框内</text>
+<view class="camera-container">
+  <view class="header-tip">请将脸部对准下方引导线</view>
+
+  <view class="camera-wrapper">
+    <camera device-position="{{devicePosition}}" flash="{{flashMode}}" resolution="high" class="live-camera">
+      
+      <cover-view class="flash-btn" bindtap="toggleFlash">
+        <cover-view class="flash-text">{{flashMode === 'torch' ? '💡 补光开' : '⚡ 补光关'}}</cover-view>
+      </cover-view>
+
+      <cover-view class="flip-btn" bindtap="switchCamera">
+        <cover-view class="flip-text">🔄 翻转</cover-view>
+      </cover-view>
+
+      <cover-view class="scan-frame">
+        <cover-view class="corner top-left"></cover-view>
+        <cover-view class="corner top-right"></cover-view>
+        <cover-view class="corner bottom-left"></cover-view>
+        <cover-view class="corner bottom-right"></cover-view>
+        
+        <cover-view class="guide-wrapper">
+          <cover-view class="eye-guide-line">
+            <cover-view class="guide-text">眼睛请位于此线上方</cover-view>
+          </cover-view>
+          <cover-view class="mouth-guide-box">
+            <cover-view class="guide-text focus-text">请张大嘴巴对准此框</cover-view>
+          </cover-view>
+        </cover-view>
+
+        <cover-view class="center-line"></cover-view>
+        <cover-view class="cross-hair-vertical"></cover-view>
+      </cover-view>
+    </camera>
   </view>
-  <button class="capture-btn" bindtap="uploadAndAnalyze">拍摄 / 上传照片</button>
+
+  <view class="instruction-card">
+    <view class="inst-title">💡 获得精准报告的秘诀</view>
+    <view class="inst-list">
+      <view class="inst-item"><text class="dot"></text>请确保画面光线充足，必要时开启左上角补光（仅后置）</view>
+      <view class="inst-item"><text class="dot"></text>尽量张大嘴巴，露出上下完整的牙龈</view>
+      <view class="inst-item"><text class="dot"></text>将牙齿完全置于绿色的聚焦框内</view>
+    </view>
+  </view>
+
+  <view class="btn-group">
+    <button class="capture-btn" bindtap="takePhotoAndCrop">
+      <text class="icon">📸</text> 实时拍摄
+    </button>
+    <button class="album-btn" bindtap="chooseFromAlbum">
+      <text class="icon">🖼️</text> 相册
+    </button>
+  </view>
+
+  <canvas type="2d" id="cropCanvas" class="offscreen-canvas"></canvas>
 </view>
