@@ -1,29 +1,22 @@
-// 🔑 你的 API KEY 和专属智能体 ID
 const API_KEY = '2119252f91594ad9a51b6fa2869391b5.MrmTdK6yt1jJWnPb'; 
 const APP_ID = '2041036538376302592'; 
 
 Page({
   data: {
-    displayList: [],     // 只需要维护屏幕显示的对话，上下文记忆由智谱云端自动接管！
+    displayList: [], 
     inputValue: '',
     bottomId: '',
     userInfo: {},
     isWaiting: false,
-    conversationId: ''   // 🌟 智能体专用的云端会话 ID
+    conversationId: ''  
   },
 
   onLoad(options) {
     const user = wx.getStorageSync('userProfile') || {};
     this.setData({ userInfo: user });
-
-    // 获取报告页传来的数据
     const score = options.score || 100;
     const issues = options.issues || '未见异常';
-
-    // 🌟 构造第一句话：把病历作为隐式用户输入发给大模型
     const firstPrompt = `我刚刚在小程序完成了口腔拍照检测，AI得分为 ${score}分，提示的问题有：${issues}。请基于这个结果，主动跟我打招呼并询问我的感受。`;
-
-    // 启动智能体 3 步曲的第一步：创建会话
     this.initAgentConversation(firstPrompt);
   },
 

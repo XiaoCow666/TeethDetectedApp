@@ -100,7 +100,6 @@ Page({
 
   handleFamilyClick(e) {
     const item = e.currentTarget.dataset.item;
-    // 🌟 核心修改：在原生底部弹窗里，加了一个红色的删除选项
     wx.showActionSheet({
       itemList: ['📋 查看TA的历史记录', '📷 切换为TA进行拍牙检测', '🗑️ 删除此家人'],
       itemColor: '#333333',
